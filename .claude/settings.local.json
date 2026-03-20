@@ -4,7 +4,8 @@
       "Bash(.venv/bin/pip install:*)",
       "Bash(ls:*)",
       "WebFetch(domain:beancount.github.io)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(.venv/bin/pytest)"
     ]
   }
 }
