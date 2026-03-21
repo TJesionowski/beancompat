@@ -19,6 +19,8 @@
               pip
               virtualenv
             ]))
+            pkgs.cargo
+            pkgs.rustc
           ];
 
           shellHook = ''

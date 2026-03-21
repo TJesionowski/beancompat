@@ -5,10 +5,12 @@ import pytest
 from implementations.adapter import CAP_PARSE
 from implementations.beancount import BeancountAdapter
 from implementations.beancountparser import BeancountParserAdapter
+from implementations.beancountparserlima import BeancountParserLimaAdapter
 
 ADAPTERS = {
     "beancount": BeancountAdapter,
     "beancount-parser": BeancountParserAdapter,
+    "beancount-parser-lima": BeancountParserLimaAdapter,
 }
 
 
