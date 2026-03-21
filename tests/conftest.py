@@ -2,7 +2,7 @@
 
 import pytest
 
-from implementations.adapter import CAP_PARSE
+from implementations.adapter import CAP_PARSE, CAP_BOOKING
 from implementations.beancount import BeancountAdapter
 from implementations.beancountparser import BeancountParserAdapter
 from implementations.beancountparserlima import BeancountParserLimaAdapter
@@ -44,6 +44,23 @@ def implementation(request):
     if not adapter.is_available():
         pytest.skip(f"{request.param} not available")
     return adapter
+
+
+@pytest.fixture(scope="session")
+def all_parsers():
+    """Return list of (name, adapter) for all available parse-capable implementations.
+
+    Used by property-based discrepancy tests that compare outputs across
+    all implementations simultaneously (not parametrized).
+    """
+    available = []
+    for name, cls in ADAPTERS.items():
+        adapter = cls()
+        if adapter.is_available() and CAP_PARSE in adapter.capabilities:
+            available.append((name, adapter))
+    if len(available) < 2:
+        pytest.skip("Need at least 2 parse-capable implementations for comparison")
+    return available
 
 
 def pytest_configure(config):
