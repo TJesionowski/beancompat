@@ -6,7 +6,17 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from implementations.adapter import Directive, Implementation, ParseResult, QueryResult
+from implementations.adapter import (
+    CAP_BOOKING,
+    CAP_BQL,
+    CAP_INCLUDES,
+    CAP_PARSE,
+    CAP_PLUGINS,
+    Directive,
+    Implementation,
+    ParseResult,
+    QueryResult,
+)
 
 
 class BeancountAdapter:
@@ -21,6 +31,10 @@ class BeancountAdapter:
     @property
     def name(self) -> str:
         return "beancount"
+
+    @property
+    def capabilities(self) -> set[str]:
+        return {CAP_PARSE, CAP_BOOKING, CAP_PLUGINS, CAP_BQL, CAP_INCLUDES}
 
     def is_available(self) -> bool:
         try:

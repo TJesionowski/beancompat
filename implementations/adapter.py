@@ -42,11 +42,21 @@ class QueryResult:
     errors: list[str] = field(default_factory=list)
 
 
+CAP_PARSE = "parse"
+CAP_BOOKING = "booking"
+CAP_PLUGINS = "plugins"
+CAP_BQL = "bql"
+CAP_INCLUDES = "includes"
+
+
 class Implementation(Protocol):
     """Protocol for a beancount implementation adapter."""
 
     @property
     def name(self) -> str: ...
+
+    @property
+    def capabilities(self) -> set[str]: ...
 
     def parse_string(self, source: str) -> ParseResult:
         """Parse a beancount source string and return structured output."""
