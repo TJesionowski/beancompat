@@ -137,8 +137,41 @@ def directive_to_dict(entry):
     return d
 
 
+def run_query(path, query_string):
+    """Load a file and execute a BQL query, emitting JSON."""
+    try:
+        import beanquery
+
+        conn = beanquery.connect("beancount://" + path)
+        result = conn.execute(query_string)
+
+        columns = [col.name for col in result.description]
+        rows = []
+        for row in result:
+            rows.append([str(v) if v is not None else None for v in row])
+
+        output = {
+            "columns": columns,
+            "rows": rows,
+            "errors": [],
+        }
+    except Exception as e:
+        output = {
+            "columns": [],
+            "rows": [],
+            "errors": [str(e)],
+        }
+
+    json.dump(output, sys.stdout, default=default_serializer)
+
+
 def main():
     path = sys.argv[1]
+
+    if len(sys.argv) >= 4 and sys.argv[2] == "--query":
+        query_string = sys.argv[3]
+        run_query(path, query_string)
+        return
 
     from beancount import loader
 

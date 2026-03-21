@@ -6,7 +6,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from implementations.adapter import Directive, Implementation, ParseResult
+from implementations.adapter import Directive, Implementation, ParseResult, QueryResult
 
 
 class BeancountAdapter:
@@ -77,4 +77,35 @@ class BeancountAdapter:
             directives=directives,
             errors=data.get("errors", []),
             options=data.get("options", {}),
+        )
+
+    def execute_query(self, source: str, query: str) -> QueryResult:
+        """Execute a BQL query against beancount source via subprocess."""
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".beancount", delete=False
+        ) as f:
+            f.write(source)
+            f.flush()
+            helper = Path(__file__).parent / "_parse_helper.py"
+            result = subprocess.run(
+                ["python3", str(helper), f.name, "--query", query],
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+
+        if result.returncode != 0:
+            return QueryResult(
+                columns=[],
+                rows=[],
+                errors=[f"beancount query exited with code {result.returncode}: {result.stderr}"],
+            )
+
+        import json
+
+        data = json.loads(result.stdout)
+        return QueryResult(
+            columns=data.get("columns", []),
+            rows=data.get("rows", []),
+            errors=data.get("errors", []),
         )

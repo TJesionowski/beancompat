@@ -33,6 +33,15 @@ class ParseResult:
     options: dict = field(default_factory=dict)
 
 
+@dataclass
+class QueryResult:
+    """Result of executing a BQL query."""
+
+    columns: list[str]
+    rows: list[list]
+    errors: list[str] = field(default_factory=list)
+
+
 class Implementation(Protocol):
     """Protocol for a beancount implementation adapter."""
 
@@ -49,4 +58,8 @@ class Implementation(Protocol):
 
     def is_available(self) -> bool:
         """Check if this implementation is installed and runnable."""
+        ...
+
+    def execute_query(self, source: str, query: str) -> QueryResult:
+        """Execute a BQL query against a beancount source string."""
         ...
