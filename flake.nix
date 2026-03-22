@@ -29,6 +29,13 @@
               python -m venv "$VIRTUAL_ENV"
             fi
             export PATH="$VIRTUAL_ENV/bin:$PATH"
+
+            # Separate venv for beancount v2 (used by beancountv2 adapter)
+            export BEANCOUNT_V2_VENV="$PWD/.venv-beancount-v2"
+            if [ ! -d "$BEANCOUNT_V2_VENV" ]; then
+              python -m venv "$BEANCOUNT_V2_VENV"
+              "$BEANCOUNT_V2_VENV/bin/pip" install -q beancount==2.3.6 beanquery
+            fi
           '';
         };
       });

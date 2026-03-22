@@ -6,9 +6,11 @@ from implementations.adapter import CAP_PARSE, CAP_BOOKING
 from implementations.beancount import BeancountAdapter
 from implementations.beancountparser import BeancountParserAdapter
 from implementations.beancountparserlima import BeancountParserLimaAdapter
+from implementations.beancountv2 import BeancountV2Adapter
 
 ADAPTERS = {
     "beancount": BeancountAdapter,
+    "beancount-v2": BeancountV2Adapter,
     "beancount-parser": BeancountParserAdapter,
     "beancount-parser-lima": BeancountParserLimaAdapter,
 }
