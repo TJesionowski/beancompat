@@ -39,6 +39,15 @@ def beancountparser():
     return adapter
 
 
+@pytest.fixture(scope="session")
+def beancountv2():
+    """Provide the beancount v2 adapter."""
+    adapter = BeancountV2Adapter()
+    if not adapter.is_available():
+        pytest.skip("beancount-v2 not available")
+    return adapter
+
+
 @pytest.fixture(scope="session", params=list(ADAPTERS.keys()))
 def implementation(request):
     """Parametrized fixture yielding each available adapter."""
