@@ -75,6 +75,30 @@ A non-Python implementation that wants to be Fava-compatible needs a Python
 frontend layer that wraps its native output into beancount-namedtuple-shaped
 objects. See the CAP_FAVA docstring in `implementations/adapter.py`.
 
+### Fava-compat coverage roadmap
+
+Derived from a survey of Fava's beancount API surface (see the
+[`fava_contract_surface` memory](.claude/memory/fava_contract_surface.md) and
+the Fava-isolation layer at `src/fava/beans/`). Items below are the known
+gaps between what beancompat verifies today and what a full Fava-compatible
+implementation must expose. Ordered roughly by Fava-blast-radius.
+
+- [ ] **`options.dcontext` neutral representation.** Options map currently passes a live `DisplayContext` object; Fava reads `.build()` and per-currency precision. Emit stable neutral keys (e.g. `display_precision_by_currency`) and add an options-coverage fixture.
+- [ ] **`MISSING` sentinel tag.** Round-trip loses the v3 `MISSING` identity; add a `{"__missing__": true}` marker in the schema.
+- [ ] **`CAP_HASH` + `hash_entries`.** Fava uses `compare.hash_entry` to drive its edit-flow JSON API. Add adapter method + fixture asserting stable, cross-impl-agreed hashes.
+- [ ] **Typed columns in `QueryResult`.** Fava reads `column.datatype` (Amount/Inventory/Position/Decimal/date). Enrich `QueryResult.columns` with type tags; add a typed-column fixture.
+- [ ] **30-key `options` coverage fixture.** Seed a fixture listing the option keys Fava reads off `BeancountOptions` (see `fava/beans/types.py`).
+- [ ] **`CAP_PLUGINS` registration method.** The capability exists but no adapter method drives plugin registration into the loader pipeline.
+- [ ] **`CAP_SUMMARIZE`** for date-range windowing (`ops.summarize.clamp_opt`). Opening/closing entry semantics.
+- [ ] **`CAP_INGEST`** — beangulp `Importer` ABC compat. Separate suite; orthogonal to core beancount but required for full Fava coverage.
+- [ ] **`loader._load(...)` private-API parity.** Fava calls a private loader fn to bypass caching. Document as a Fava-side wart; not beancompat's problem to fix.
+
+### Shipped
+- Parse/check-tier JSON fixtures (`test_fixtures.py`)
+- `CAP_PRINT` round-trip (`test_round_trip.py`)
+- `CAP_FAVA` Python-level ABC conformance (`test_fava_compat.py`)
+- `CostSpec` vs `Cost` `kind` discriminator in the portable schema
+
 ## Project structure
 
 ```
