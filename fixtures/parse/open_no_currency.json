@@ -1,0 +1,20 @@
+{
+  "name": "open_no_currency",
+  "description": "Open directive with no currency constraint.",
+  "source": "2024-01-01 open Expenses:Food\n",
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Expenses:Food",
+          "currencies": [],
+          "booking": null
+        }
+      }
+    ]
+  }
+}

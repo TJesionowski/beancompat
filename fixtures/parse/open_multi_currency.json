@@ -1,0 +1,27 @@
+{
+  "name": "open_multi_currency",
+  "description": "Open directive with multiple allowed currencies. Reference (beancount v3) preserves source order.",
+  "source": "2024-01-01 open Assets:Bank USD,EUR,GBP\n",
+  "known_divergences": {
+    "beancount-parser-lima": "Currency list order is non-deterministic across runs (appears to iterate a HashSet with randomized hashing) rather than preserving source order."
+  },
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Assets:Bank",
+          "currencies": [
+            "USD",
+            "EUR",
+            "GBP"
+          ],
+          "booking": null
+        }
+      }
+    ]
+  }
+}

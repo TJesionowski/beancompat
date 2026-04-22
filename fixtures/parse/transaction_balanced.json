@@ -1,0 +1,70 @@
+{
+  "name": "transaction_balanced",
+  "description": "Two-posting balanced transaction with payee and narration.",
+  "source": "2024-01-01 open Assets:Bank USD\n2024-01-01 open Expenses:Food USD\n\n2024-01-15 * \"Grocery store\" \"Weekly groceries\"\n  Expenses:Food  50.00 USD\n  Assets:Bank   -50.00 USD\n",
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Assets:Bank",
+          "currencies": [
+            "USD"
+          ],
+          "booking": null
+        }
+      },
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Expenses:Food",
+          "currencies": [
+            "USD"
+          ],
+          "booking": null
+        }
+      },
+      {
+        "type": "transaction",
+        "date": "2024-01-15",
+        "meta": {},
+        "data": {
+          "flag": "*",
+          "payee": "Grocery store",
+          "narration": "Weekly groceries",
+          "tags": [],
+          "links": [],
+          "postings": [
+            {
+              "account": "Expenses:Food",
+              "units": {
+                "number": "50.00",
+                "currency": "USD"
+              },
+              "cost": null,
+              "price": null,
+              "flag": null,
+              "meta": {}
+            },
+            {
+              "account": "Assets:Bank",
+              "units": {
+                "number": "-50.00",
+                "currency": "USD"
+              },
+              "cost": null,
+              "price": null,
+              "flag": null,
+              "meta": {}
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

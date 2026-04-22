@@ -1,0 +1,22 @@
+{
+  "name": "open_single",
+  "description": "Single open directive with one currency constraint.",
+  "source": "2024-01-01 open Assets:Bank USD\n",
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Assets:Bank",
+          "currencies": [
+            "USD"
+          ],
+          "booking": null
+        }
+      }
+    ]
+  }
+}

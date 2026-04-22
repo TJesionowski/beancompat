@@ -1,0 +1,22 @@
+{
+  "name": "price",
+  "description": "Price directive recording an exchange rate.",
+  "source": "2024-01-15 price EUR  1.10 USD\n",
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "price",
+        "date": "2024-01-15",
+        "meta": {},
+        "data": {
+          "currency": "EUR",
+          "amount": {
+            "number": "1.10",
+            "currency": "USD"
+          }
+        }
+      }
+    ]
+  }
+}

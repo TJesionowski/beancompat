@@ -1,0 +1,70 @@
+{
+  "name": "transaction_auto_balance",
+  "description": "Transaction where one posting's amount is elided and auto-balanced.",
+  "source": "2024-01-01 open Assets:Bank USD\n2024-01-01 open Expenses:Food USD\n\n2024-01-15 * \"Lunch\"\n  Expenses:Food  12.50 USD\n  Assets:Bank\n",
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Assets:Bank",
+          "currencies": [
+            "USD"
+          ],
+          "booking": null
+        }
+      },
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Expenses:Food",
+          "currencies": [
+            "USD"
+          ],
+          "booking": null
+        }
+      },
+      {
+        "type": "transaction",
+        "date": "2024-01-15",
+        "meta": {},
+        "data": {
+          "flag": "*",
+          "payee": null,
+          "narration": "Lunch",
+          "tags": [],
+          "links": [],
+          "postings": [
+            {
+              "account": "Expenses:Food",
+              "units": {
+                "number": "12.50",
+                "currency": "USD"
+              },
+              "cost": null,
+              "price": null,
+              "flag": null,
+              "meta": {}
+            },
+            {
+              "account": "Assets:Bank",
+              "units": {
+                "number": "-12.50",
+                "currency": "USD"
+              },
+              "cost": null,
+              "price": null,
+              "flag": null,
+              "meta": {}
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

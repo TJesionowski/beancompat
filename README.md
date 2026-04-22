@@ -52,13 +52,23 @@ pytest tests/
 pytest tests/ --implementation=limabean
 ```
 
+## Portable fixtures
+
+For implementations in languages other than Python, `fixtures/` holds a set of
+JSON files — each pairs a `.beancount` snippet with the expected parse output
+in a neutral shape. Any implementation can consume these directly without a
+Python test harness. See [`fixtures/README.md`](fixtures/README.md) for the
+schema, tiering (`parse/` vs `check/`), and a non-Python consumption recipe.
+
 ## Project structure
 
 ```
 beancompat/
 ├── docs/references/      # Primary sources and reference index
+├── fixtures/             # Portable JSON fixtures (language-independent)
 ├── implementations/      # Per-implementation adapter configuration
 ├── ledgers/              # Sample .beancount files used by tests
+├── scripts/              # Fixture generator and CLI runner
 ├── strategies/           # Hypothesis strategies for beancount primitives
 ├── tests/                # Property tests
 └── results/              # Generated: test results and diff reports

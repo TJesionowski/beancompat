@@ -1,0 +1,30 @@
+{
+  "name": "close",
+  "description": "Close directive for an account previously opened.",
+  "source": "2024-01-01 open Assets:Bank USD\n2024-12-31 close Assets:Bank\n",
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Assets:Bank",
+          "currencies": [
+            "USD"
+          ],
+          "booking": null
+        }
+      },
+      {
+        "type": "close",
+        "date": "2024-12-31",
+        "meta": {},
+        "data": {
+          "account": "Assets:Bank"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "commodity",
+  "description": "Commodity directive declaring a new currency with metadata.",
+  "source": "2024-01-01 commodity USD\n  name: \"US Dollar\"\n",
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "commodity",
+        "date": "2024-01-01",
+        "meta": {
+          "name": "US Dollar"
+        },
+        "data": {
+          "currency": "USD"
+        }
+      }
+    ]
+  }
+}

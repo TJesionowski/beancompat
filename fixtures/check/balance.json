@@ -1,0 +1,84 @@
+{
+  "name": "balance",
+  "description": "Balance assertion directive.",
+  "source": "2024-01-01 open Assets:Bank USD\n\n2024-01-15 * \"Deposit\"\n  Assets:Bank   100.00 USD\n  Income:Salary -100.00 USD\n\n2024-01-01 open Income:Salary USD\n\n2024-02-01 balance Assets:Bank  100.00 USD\n",
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Assets:Bank",
+          "currencies": [
+            "USD"
+          ],
+          "booking": null
+        }
+      },
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Income:Salary",
+          "currencies": [
+            "USD"
+          ],
+          "booking": null
+        }
+      },
+      {
+        "type": "transaction",
+        "date": "2024-01-15",
+        "meta": {},
+        "data": {
+          "flag": "*",
+          "payee": null,
+          "narration": "Deposit",
+          "tags": [],
+          "links": [],
+          "postings": [
+            {
+              "account": "Assets:Bank",
+              "units": {
+                "number": "100.00",
+                "currency": "USD"
+              },
+              "cost": null,
+              "price": null,
+              "flag": null,
+              "meta": {}
+            },
+            {
+              "account": "Income:Salary",
+              "units": {
+                "number": "-100.00",
+                "currency": "USD"
+              },
+              "cost": null,
+              "price": null,
+              "flag": null,
+              "meta": {}
+            }
+          ]
+        }
+      },
+      {
+        "type": "balance",
+        "date": "2024-02-01",
+        "meta": {},
+        "data": {
+          "account": "Assets:Bank",
+          "amount": {
+            "number": "100.00",
+            "currency": "USD"
+          },
+          "tolerance": null,
+          "diff_amount": null
+        }
+      }
+    ]
+  }
+}
