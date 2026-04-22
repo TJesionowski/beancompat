@@ -86,7 +86,14 @@ Type-specific `data` fields (see `scripts/generate_fixtures.py` and `implementat
 | `note`        | `account`, `comment` |
 | `event`       | `type`, `description` |
 
-Posting shape: `{account, units: {number, currency} | null, cost: {number?, currency?, date?, label?} | null, price: {number, currency} | null, flag: string | null, meta: object}`.
+Posting shape: `{account, units: {number, currency} | null, cost: Cost | CostSpec | null, price: {number, currency} | null, flag: string | null, meta: object}`.
+
+Cost vs CostSpec — a posting's `cost` field carries a `kind` discriminator:
+
+- `{"kind": "cost", "number": "...", "currency": "...", "date"?: "...", "label"?: "..."}` — a booked Cost, produced after the loader's booking pass. Emitted by implementations at the check tier (CAP_BOOKING).
+- `{"kind": "cost_spec", "number_per"?: "...", "number_total"?: "...", "merge"?: bool, "currency"?: "...", "date"?: "...", "label"?: "..."}` — an unbooked CostSpec, produced by parser-only implementations or at the parse tier.
+
+Fava renders these differently; implementations must emit the right shape for their tier. The same source can produce `cost_spec` at parse tier and `cost` at check tier.
 
 Numbers are serialized as decimal strings (e.g. `"50.00"`), never floats, to preserve precision.
 

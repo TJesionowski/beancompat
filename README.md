@@ -60,6 +60,21 @@ in a neutral shape. Any implementation can consume these directly without a
 Python test harness. See [`fixtures/README.md`](fixtures/README.md) for the
 schema, tiering (`parse/` vs `check/`), and a non-Python consumption recipe.
 
+## Compatibility tiers
+
+beancompat has three compatibility tiers, with increasing strictness:
+
+| Tier | Capability | Test file | What it checks |
+|------|-----------|-----------|----------------|
+| **Parse** | `CAP_PARSE` | `test_fixtures.py` (parse/ fixtures) | Source parses to directives with the right shape |
+| **Check** | `CAP_BOOKING` | `test_fixtures.py` (check/ fixtures) | Full loader semantics — booking, interpolation, balance assertions |
+| **Round-trip** | `CAP_PRINT` | `test_round_trip.py` | Implementation can re-serialize its own output back to parseable source |
+| **Fava** | `CAP_FAVA` | `test_fava_compat.py` | In-process Python objects satisfy `fava.beans.abc` protocols — a Fava-compatible implementation can drive Fava's edit, chart, and query UIs |
+
+A non-Python implementation that wants to be Fava-compatible needs a Python
+frontend layer that wraps its native output into beancount-namedtuple-shaped
+objects. See the CAP_FAVA docstring in `implementations/adapter.py`.
+
 ## Project structure
 
 ```

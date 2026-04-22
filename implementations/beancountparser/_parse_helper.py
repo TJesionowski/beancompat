@@ -76,10 +76,10 @@ def extract_amount(amount_tree):
 
 
 def extract_cost(cost_tree):
-    """Extract cost dict from a cost_spec tree."""
+    """Extract cost dict from a cost_spec tree. Parser tier — always CostSpec."""
     if cost_tree is None or not isinstance(cost_tree, Tree):
         return None
-    result = {}
+    result = {"kind": "cost_spec"}
     for item in cost_tree.children:
         if not isinstance(item, Tree) or str(item.data) != "cost_item":
             continue
@@ -87,14 +87,15 @@ def extract_cost(cost_tree):
         if isinstance(child, Tree) and str(child.data) == "amount":
             amt = extract_amount(child)
             if amt:
-                result["number"] = amt["number"]
+                # Single-amount form in a cost_spec is the per-unit number.
+                result["number_per"] = amt["number"]
                 result["currency"] = amt["currency"]
         elif isinstance(child, Token):
             if child.type == "DATE":
                 result["date"] = str(child)
             elif child.type == "ESCAPED_STRING":
                 result["label"] = str(child).strip('"')
-    return result or None
+    return result
 
 
 def extract_price(price_tree):

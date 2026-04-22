@@ -64,7 +64,7 @@ def main(argv: list[str]) -> int:
         print("error: reference adapter (beancount v3) is not available", file=sys.stderr)
         return 1
 
-    targets = [Path(a) for a in argv[1:]] if len(argv) > 1 else discover()
+    targets = [Path(a).resolve() for a in argv[1:]] if len(argv) > 1 else discover()
     if not targets:
         print("no fixtures found", file=sys.stderr)
         return 1

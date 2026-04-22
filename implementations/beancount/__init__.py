@@ -9,9 +9,11 @@ from pathlib import Path
 from implementations.adapter import (
     CAP_BOOKING,
     CAP_BQL,
+    CAP_FAVA,
     CAP_INCLUDES,
     CAP_PARSE,
     CAP_PLUGINS,
+    CAP_PRINT,
     Directive,
     Implementation,
     ParseResult,
@@ -34,7 +36,15 @@ class BeancountAdapter:
 
     @property
     def capabilities(self) -> set[str]:
-        return {CAP_PARSE, CAP_BOOKING, CAP_PLUGINS, CAP_BQL, CAP_INCLUDES}
+        return {
+            CAP_PARSE,
+            CAP_BOOKING,
+            CAP_PLUGINS,
+            CAP_BQL,
+            CAP_INCLUDES,
+            CAP_PRINT,
+            CAP_FAVA,
+        }
 
     def is_available(self) -> bool:
         try:
@@ -92,6 +102,36 @@ class BeancountAdapter:
             errors=data.get("errors", []),
             options=data.get("options", {}),
         )
+
+    def format_source(self, source: str) -> str:
+        """Re-serialize parsed source through beancount v3's printer."""
+        helper = Path(__file__).parent / "_parse_helper.py"
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".beancount", delete=False
+        ) as f:
+            f.write(source)
+            f.flush()
+            result = subprocess.run(
+                ["python3", str(helper), f.name, "--format"],
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"beancount format exited with code {result.returncode}: {result.stderr}"
+            )
+        return result.stdout
+
+    def load_as_fava(self, source: str) -> tuple[list, list, dict]:
+        """Return live Python objects from beancount.loader.load_string.
+
+        Intentionally in-process, not subprocess — Fava-compat is a
+        Python-level protocol test, not a JSON diff.
+        """
+        from beancount import loader
+
+        return loader.load_string(source)
 
     def execute_query(self, source: str, query: str) -> QueryResult:
         """Execute a BQL query against beancount source via subprocess."""

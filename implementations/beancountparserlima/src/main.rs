@@ -111,18 +111,20 @@ fn main() {
                                 _ => None,
                             };
 
+                            // Lima is a parser (no booking pass), so costs are always CostSpec.
                             let cost = p.cost_spec().map(|cs| {
                                 let cs = cs.item();
                                 let mut cost_obj = serde_json::Map::new();
+                                cost_obj.insert("kind".into(), json!("cost_spec"));
                                 if let Some(per_unit) = cs.per_unit() {
                                     cost_obj.insert(
-                                        "number".into(),
+                                        "number_per".into(),
                                         json!(per_unit.item().value().to_string()),
                                     );
                                 }
                                 if let Some(total) = cs.total() {
                                     cost_obj.insert(
-                                        "number".into(),
+                                        "number_total".into(),
                                         json!(total.item().value().to_string()),
                                     );
                                 }

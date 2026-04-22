@@ -50,19 +50,41 @@ def serialize_amount(amount):
 
 
 def serialize_cost(cost):
-    """Serialize a beancount Cost/CostSpec to dict."""
+    """Serialize a beancount Cost or CostSpec to dict.
+
+    Discriminates the two with a `kind` field:
+      - `cost`      : booked Cost (post-interpolation), has concrete number
+      - `cost_spec` : unbooked CostSpec, may have number_per/number_total/merge
+
+    Fava renders these differently; distinguishing them is part of the
+    portable schema contract.
+    """
     if cost is None:
         return None
-    result = {}
-    if hasattr(cost, "number") and cost.number is not None:
-        result["number"] = str(cost.number)
-    if hasattr(cost, "currency") and cost.currency is not None:
+
+    # CostSpec has number_per / number_total / merge attributes (from the
+    # grammar); Cost has a single `number`.
+    is_spec = hasattr(cost, "number_per") or hasattr(cost, "number_total") or hasattr(cost, "merge")
+    result = {"kind": "cost_spec" if is_spec else "cost"}
+
+    if is_spec:
+        if getattr(cost, "number_per", None) is not None:
+            result["number_per"] = str(cost.number_per)
+        if getattr(cost, "number_total", None) is not None:
+            result["number_total"] = str(cost.number_total)
+        if getattr(cost, "merge", None) is not None:
+            result["merge"] = bool(cost.merge)
+    else:
+        if getattr(cost, "number", None) is not None:
+            result["number"] = str(cost.number)
+
+    if getattr(cost, "currency", None) is not None:
         result["currency"] = cost.currency
-    if hasattr(cost, "date") and cost.date is not None:
+    if getattr(cost, "date", None) is not None:
         result["date"] = cost.date.isoformat()
-    if hasattr(cost, "label") and cost.label is not None:
+    if getattr(cost, "label", None) is not None:
         result["label"] = cost.label
-    return result or None
+    return result
 
 
 def directive_to_dict(entry):
@@ -165,12 +187,25 @@ def run_query(path, query_string):
     json.dump(output, sys.stdout, default=default_serializer)
 
 
+def run_format(path):
+    """Load a file and re-serialize it through beancount's printer."""
+    from beancount import loader
+    from beancount.parser import printer
+
+    entries, _errors, _options = loader.load_file(path)
+    printer.print_entries(entries, file=sys.stdout)
+
+
 def main():
     path = sys.argv[1]
 
     if len(sys.argv) >= 4 and sys.argv[2] == "--query":
         query_string = sys.argv[3]
         run_query(path, query_string)
+        return
+
+    if len(sys.argv) >= 3 and sys.argv[2] == "--format":
+        run_format(path)
         return
 
     from beancount import loader

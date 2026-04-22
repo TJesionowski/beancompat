@@ -47,6 +47,13 @@ CAP_BOOKING = "booking"
 CAP_PLUGINS = "plugins"
 CAP_BQL = "bql"
 CAP_INCLUDES = "includes"
+# Can re-serialize parsed directives back to beancount source.
+CAP_PRINT = "print"
+# Exposes a Python-level view of parse output that satisfies fava.beans.abc
+# protocols. For a non-Python implementation this means shipping a thin
+# Python frontend (e.g. a bindings module that wraps native output into
+# beancount-namedtuple-compatible objects).
+CAP_FAVA = "fava"
 
 
 class Implementation(Protocol):
@@ -72,4 +79,17 @@ class Implementation(Protocol):
 
     def execute_query(self, source: str, query: str) -> QueryResult:
         """Execute a BQL query against a beancount source string."""
+        ...
+
+    def format_source(self, source: str) -> str:
+        """Parse beancount source and re-serialize it. Requires CAP_PRINT."""
+        ...
+
+    def load_as_fava(self, source: str) -> tuple[list, list, dict]:
+        """Return (entries, errors, options) as Python objects satisfying
+        fava.beans.abc protocols. Requires CAP_FAVA.
+
+        Unlike parse_string (which is JSON-oriented and subprocess-based),
+        this returns live Python objects and is allowed to run in-process.
+        """
         ...

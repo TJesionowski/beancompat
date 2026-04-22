@@ -50,19 +50,28 @@ def serialize_amount(amount):
 
 
 def serialize_cost(cost):
-    """Serialize a beancount Cost/CostSpec to dict."""
+    """Serialize a beancount Cost or CostSpec to dict, with `kind` discriminator."""
     if cost is None:
         return None
-    result = {}
-    if hasattr(cost, "number") and cost.number is not None:
-        result["number"] = str(cost.number)
-    if hasattr(cost, "currency") and cost.currency is not None:
+    is_spec = hasattr(cost, "number_per") or hasattr(cost, "number_total") or hasattr(cost, "merge")
+    result = {"kind": "cost_spec" if is_spec else "cost"}
+    if is_spec:
+        if getattr(cost, "number_per", None) is not None:
+            result["number_per"] = str(cost.number_per)
+        if getattr(cost, "number_total", None) is not None:
+            result["number_total"] = str(cost.number_total)
+        if getattr(cost, "merge", None) is not None:
+            result["merge"] = bool(cost.merge)
+    else:
+        if getattr(cost, "number", None) is not None:
+            result["number"] = str(cost.number)
+    if getattr(cost, "currency", None) is not None:
         result["currency"] = cost.currency
-    if hasattr(cost, "date") and cost.date is not None:
+    if getattr(cost, "date", None) is not None:
         result["date"] = cost.date.isoformat()
-    if hasattr(cost, "label") and cost.label is not None:
+    if getattr(cost, "label", None) is not None:
         result["label"] = cost.label
-    return result or None
+    return result
 
 
 def directive_to_dict(entry):

@@ -1,0 +1,81 @@
+{
+  "name": "transaction_with_cost",
+  "description": "Transaction with per-unit cost basis; at check tier, the cost is booked into a concrete Cost.",
+  "source": "2024-01-01 open Assets:Stocks \"STRICT\"\n2024-01-01 open Assets:Bank USD\n2024-01-01 commodity AAPL\n\n2024-01-15 * \"Buy shares\"\n  Assets:Stocks  10 AAPL {150.00 USD}\n  Assets:Bank   -1500.00 USD\n",
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Assets:Stocks",
+          "currencies": [],
+          "booking": "STRICT"
+        }
+      },
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "account": "Assets:Bank",
+          "currencies": [
+            "USD"
+          ],
+          "booking": null
+        }
+      },
+      {
+        "type": "commodity",
+        "date": "2024-01-01",
+        "meta": {},
+        "data": {
+          "currency": "AAPL"
+        }
+      },
+      {
+        "type": "transaction",
+        "date": "2024-01-15",
+        "meta": {},
+        "data": {
+          "flag": "*",
+          "payee": null,
+          "narration": "Buy shares",
+          "tags": [],
+          "links": [],
+          "postings": [
+            {
+              "account": "Assets:Stocks",
+              "units": {
+                "number": "10",
+                "currency": "AAPL"
+              },
+              "cost": {
+                "kind": "cost",
+                "number": "150.00",
+                "currency": "USD",
+                "date": "2024-01-15"
+              },
+              "price": null,
+              "flag": null,
+              "meta": {}
+            },
+            {
+              "account": "Assets:Bank",
+              "units": {
+                "number": "-1500.00",
+                "currency": "USD"
+              },
+              "cost": null,
+              "price": null,
+              "flag": null,
+              "meta": {}
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
