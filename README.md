@@ -79,19 +79,23 @@ objects. See the CAP_FAVA docstring in `implementations/adapter.py`.
 
 Derived from a survey of Fava's beancount API surface (see the
 [`fava_contract_surface` memory](.claude/memory/fava_contract_surface.md) and
-the Fava-isolation layer at `src/fava/beans/`). Items below are the known
-gaps between what beancompat verifies today and what a full Fava-compatible
-implementation must expose. Ordered roughly by Fava-blast-radius.
+the Fava-isolation layer at `src/fava/beans/`). Each row below is a known gap
+between what beancompat verifies today and what a full Fava-compatible
+implementation must expose. Ordered roughly by Fava-blast-radius. Click into
+each issue file under [`docs/issues/`](docs/issues/) for the problem, context,
+acceptance criteria, and references.
 
-- [ ] **`options.dcontext` neutral representation.** Options map currently passes a live `DisplayContext` object; Fava reads `.build()` and per-currency precision. Emit stable neutral keys (e.g. `display_precision_by_currency`) and add an options-coverage fixture.
-- [ ] **`MISSING` sentinel tag.** Round-trip loses the v3 `MISSING` identity; add a `{"__missing__": true}` marker in the schema.
-- [ ] **`CAP_HASH` + `hash_entries`.** Fava uses `compare.hash_entry` to drive its edit-flow JSON API. Add adapter method + fixture asserting stable, cross-impl-agreed hashes.
-- [ ] **Typed columns in `QueryResult`.** Fava reads `column.datatype` (Amount/Inventory/Position/Decimal/date). Enrich `QueryResult.columns` with type tags; add a typed-column fixture.
-- [ ] **30-key `options` coverage fixture.** Seed a fixture listing the option keys Fava reads off `BeancountOptions` (see `fava/beans/types.py`).
-- [ ] **`CAP_PLUGINS` registration method.** The capability exists but no adapter method drives plugin registration into the loader pipeline.
-- [ ] **`CAP_SUMMARIZE`** for date-range windowing (`ops.summarize.clamp_opt`). Opening/closing entry semantics.
-- [ ] **`CAP_INGEST`** — beangulp `Importer` ABC compat. Separate suite; orthogonal to core beancount but required for full Fava coverage.
-- [ ] **`loader._load(...)` private-API parity.** Fava calls a private loader fn to bypass caching. Document as a Fava-side wart; not beancompat's problem to fix.
+| Issue | Capability |
+|---|---|
+| [`options.dcontext` neutral representation](docs/issues/options-dcontext-neutral.md) | CAP_FAVA |
+| [`MISSING` sentinel tag](docs/issues/missing-sentinel.md) | CAP_PRINT, CAP_FAVA |
+| [`CAP_HASH` + `hash_entries`](docs/issues/cap-hash.md) | CAP_HASH (new) |
+| [Typed columns in `QueryResult`](docs/issues/typed-query-columns.md) | CAP_BQL, CAP_FAVA |
+| [30-key `options` coverage fixture](docs/issues/options-coverage-fixture.md) | CAP_FAVA |
+| [`CAP_PLUGINS` registration method](docs/issues/cap-plugins-registration.md) | CAP_PLUGINS |
+| [`CAP_SUMMARIZE` for date-range windowing](docs/issues/cap-summarize.md) | CAP_SUMMARIZE (new) |
+| [`CAP_INGEST` (deferred)](docs/issues/cap-ingest.md) | CAP_INGEST (new) |
+| [`loader._load(...)` private-API parity](docs/issues/loader-private-api.md) | wontfix — Fava-side wart |
 
 ### Shipped
 - Parse/check-tier JSON fixtures (`test_fixtures.py`)
@@ -103,6 +107,7 @@ implementation must expose. Ordered roughly by Fava-blast-radius.
 
 ```
 beancompat/
+├── docs/issues/          # Open work items, one file per item
 ├── docs/references/      # Primary sources and reference index
 ├── fixtures/             # Portable JSON fixtures (language-independent)
 ├── implementations/      # Per-implementation adapter configuration
