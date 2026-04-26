@@ -35,7 +35,7 @@ Status conventions:
 - **resolved** — done; keep the file with a one-line note pointing to the resolving commit or PR.
 - **wontfix** — captured for visibility but not actionable in this repo (e.g. the gap belongs upstream).
 
-## Open
+## Open — Fava-compat coverage
 
 | Issue | Capability | Notes |
 |---|---|---|
@@ -47,6 +47,15 @@ Status conventions:
 | [`CAP_PLUGINS` registration method](cap-plugins-registration.md) | CAP_PLUGINS | Adapter-level plugin registration |
 | [`CAP_SUMMARIZE` for date-range windowing](cap-summarize.md) | CAP_SUMMARIZE (new) | Opening/closing entry semantics |
 | [`CAP_INGEST` (deferred)](cap-ingest.md) | CAP_INGEST (new) | beangulp `Importer` ABC compat |
+
+## Open — Implementation adapters
+
+| Issue | Language | Notes |
+|---|---|---|
+| [Adapter: limabean](adapter-limabean.md) | Rust | Stub directory exists; first booking-capable Rust adapter |
+| [Adapter: TurboBean](adapter-turbobean.md) | TBD | Stub directory exists; vNext divergence target |
+| [Adapter: rustledger](adapter-rustledger.md) | Rust | Ships its own AI-assisted spec — divergence audit opportunity |
+| [Adapters: Dart / Zig / Clojure](adapter-other-languages.md) | various | Tracking issue; split off as projects firm up |
 
 ## Wontfix
 
