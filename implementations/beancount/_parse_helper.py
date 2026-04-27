@@ -12,6 +12,9 @@ from decimal import Decimal
 from enum import Enum
 
 
+_UNSERIALIZABLE = object()
+
+
 def default_serializer(obj):
     if isinstance(obj, Decimal):
         return str(obj)
@@ -22,6 +25,23 @@ def default_serializer(obj):
     if isinstance(obj, Enum):
         return obj.value
     raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
+
+
+def serialize_option_value(v):
+    """Serialize a single options value; return _UNSERIALIZABLE for Python-only objects."""
+    if isinstance(v, (str, int, float, bool, type(None))):
+        return v
+    if isinstance(v, Decimal):
+        return str(v)
+    if isinstance(v, (set, frozenset)):
+        return sorted(str(x) for x in v)
+    if isinstance(v, Enum):
+        return v.value
+    if isinstance(v, dict):
+        return {str(k): serialize_option_value(val) for k, val in v.items()}
+    if isinstance(v, (list, tuple)):
+        return [serialize_option_value(i) for i in v]
+    return _UNSERIALIZABLE  # e.g. DisplayContext
 
 
 def serialize_meta(meta):
@@ -212,13 +232,11 @@ def main():
 
     entries, errors, options = loader.load_file(path)
 
-    # Serialize options, including lists of strings
     serialized_options = {}
     for k, v in options.items():
-        if isinstance(v, (str, int, float, bool, type(None))):
-            serialized_options[k] = v
-        elif isinstance(v, list) and all(isinstance(i, str) for i in v):
-            serialized_options[k] = v
+        result = serialize_option_value(v)
+        if result is not _UNSERIALIZABLE:
+            serialized_options[k] = result
 
     output = {
         "directives": [directive_to_dict(e) for e in entries],

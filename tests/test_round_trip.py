@@ -51,8 +51,11 @@ def test_round_trip(printing_adapter, fixture_path):
     # The re-parsed result should contain the same assertions as the original.
     # Use the fixture's `expected` as the invariant so we're asserting Fava's
     # contract, not implementation-internal noise like whitespace.
+    # Options are excluded: beancount's printer only emits directives, not
+    # option declarations, so options are intentionally lost in the round-trip.
+    expected_for_round_trip = {k: v for k, v in data["expected"].items() if k != "options"}
     actual = parse_result_to_dict(reparsed)
-    ok, reason = contains_parse_result(actual, data["expected"])
+    ok, reason = contains_parse_result(actual, expected_for_round_trip)
     assert ok, (
         f"round-trip failed on {data['name']!r} with {printing_adapter.name}: {reason}\n"
         f"original source:\n{data['source']}\n"

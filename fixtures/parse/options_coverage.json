@@ -1,0 +1,57 @@
+{
+  "name": "options_coverage",
+  "description": "Asserts the ~30 BeancountOptions keys Fava reads are present and correctly typed. Key list derived from fava/beans/types.py (fava 1.30.12). Excludes filename, include, input_hash (runtime-varying) and dcontext (non-serializable live object; see FAVA-001).",
+  "source": "option \"title\" \"Options Coverage Test\"\noption \"operating_currency\" \"USD\"\noption \"operating_currency\" \"EUR\"\noption \"name_assets\" \"Assets\"\noption \"name_liabilities\" \"Liabilities\"\noption \"name_equity\" \"Equity\"\noption \"name_income\" \"Income\"\noption \"name_expenses\" \"Expenses\"\noption \"account_previous_balances\" \"Opening-Balances\"\noption \"account_previous_earnings\" \"Earnings:Previous\"\noption \"account_previous_conversions\" \"Conversions:Previous\"\noption \"account_current_earnings\" \"Earnings:Current\"\noption \"account_current_conversions\" \"Conversions:Current\"\noption \"account_unrealized_gains\" \"Earnings:Unrealized\"\noption \"account_rounding\" \"Equity:Rounding\"\noption \"booking_method\" \"STRICT\"\noption \"conversion_currency\" \"NOTHING\"\noption \"infer_tolerance_from_cost\" \"TRUE\"\noption \"render_commas\" \"TRUE\"\noption \"plugin_processing_mode\" \"default\"\noption \"tolerance_multiplier\" \"2.0\"\noption \"inferred_tolerance_default\" \"USD:0.005\"\n\n2024-01-01 open Assets:Bank USD\n",
+  "known_divergences": {
+    "beancount-parser": "Parser-only adapter; no loader, options map is empty.",
+    "beancount-parser-lima": "Parser-only adapter; no loader, options map is empty.",
+    "beancount-v2": "beancount v2 omits booking_method, commodities, display_precision, inferred_tolerance_default, tolerance_multiplier, inferred_tolerance_multiplier, account_unrealized_gains, and pythonpath; v3-only options trigger parse errors."
+  },
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "data": {
+          "account": "Assets:Bank",
+          "currencies": ["USD"],
+          "booking": null
+        }
+      }
+    ],
+    "options": {
+      "title": "Options Coverage Test",
+      "name_assets": "Assets",
+      "name_liabilities": "Liabilities",
+      "name_equity": "Equity",
+      "name_income": "Income",
+      "name_expenses": "Expenses",
+      "account_previous_balances": "Opening-Balances",
+      "account_previous_earnings": "Earnings:Previous",
+      "account_previous_conversions": "Conversions:Previous",
+      "account_current_earnings": "Earnings:Current",
+      "account_current_conversions": "Conversions:Current",
+      "account_unrealized_gains": "Earnings:Unrealized",
+      "account_rounding": "Equity:Rounding",
+      "booking_method": "STRICT",
+      "commodities": [],
+      "conversion_currency": "NOTHING",
+      "display_precision": {},
+      "inferred_tolerance_default": {"USD": "0.005"},
+      "inferred_tolerance_multiplier": "0.5",
+      "tolerance_multiplier": "2.0",
+      "infer_tolerance_from_cost": true,
+      "operating_currency": ["USD", "EUR"],
+      "render_commas": true,
+      "plugin_processing_mode": "default",
+      "plugin": [],
+      "documents": [],
+      "pythonpath": [],
+      "insert_pythonpath": false,
+      "allow_deprecated_none_for_tags_and_links": false,
+      "allow_pipe_separator": false,
+      "long_string_maxlines": 64
+    }
+  }
+}
