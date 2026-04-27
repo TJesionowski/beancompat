@@ -15,6 +15,7 @@ from implementations.adapter import (
     CAP_PARSE,
     CAP_PLUGINS,
     CAP_PRINT,
+    ColumnInfo,
     Directive,
     Implementation,
     ParseResult,
@@ -182,8 +183,12 @@ class BeancountAdapter:
         import json
 
         data = json.loads(result.stdout)
+        columns = [
+            ColumnInfo(name=c["name"], datatype=c["datatype"])
+            for c in data.get("columns", [])
+        ]
         return QueryResult(
-            columns=data.get("columns", []),
+            columns=columns,
             rows=data.get("rows", []),
             errors=data.get("errors", []),
         )

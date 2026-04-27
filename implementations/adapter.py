@@ -34,10 +34,18 @@ class ParseResult:
 
 
 @dataclass
+class ColumnInfo:
+    """A single column in a BQL query result."""
+
+    name: str
+    datatype: str  # "str", "int", "Decimal", "date", "Amount", "Inventory", "Position", …
+
+
+@dataclass
 class QueryResult:
     """Result of executing a BQL query."""
 
-    columns: list[str]
+    columns: list[ColumnInfo]
     rows: list[list]
     errors: list[str] = field(default_factory=list)
 

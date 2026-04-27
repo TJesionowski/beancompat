@@ -1,7 +1,7 @@
 ---
 id: FAVA-004
 title: "Typed columns in QueryResult"
-status: open
+status: done
 priority: medium
 created: 2026-04-26
 category: FAVA
@@ -31,6 +31,10 @@ The fix is to enrich `QueryResult.columns` with type tags (e.g. `list[tuple[str,
 - [ ] v2 adapter populates the datatype tag from v2's equivalent.
 - [ ] `tests/test_bql.py` has at least one test asserting datatype tags for queries that return Amount, Inventory, Decimal, and date columns.
 - [ ] Existing BQL tests updated to the new shape.
+
+## Resolution
+
+`ColumnInfo(name, datatype)` dataclass added to `implementations/adapter.py`; `QueryResult.columns` changed from `list[str]` to `list[ColumnInfo]`. `_dtype_name()` maps Python types (from `col.datatype` on beanquery's result description) to stable string tags using a module-qualified lookup table. Both the v3 and v2 parse helpers updated to emit `{"name": …, "datatype": …}` dicts; both adapter `execute_query` methods updated to build `ColumnInfo` objects. `tests/test_bql.py` gains `TestBQLColumnTypes` with 5 tests covering shape, str, Inventory, date, and int column types.
 
 ## References
 

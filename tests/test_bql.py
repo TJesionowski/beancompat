@@ -47,6 +47,7 @@ class TestBQL:
         result = beancount.execute_query(LEDGER, query)
         assert len(result.errors) == 0
         assert len(result.columns) >= 2
+        assert result.columns[0].name == "account"
         assert len(result.rows) > 0
         accounts = [row[0] for row in result.rows]
         assert "Assets:Bank" in accounts
@@ -101,3 +102,49 @@ class TestBQL:
         query = "SELECTT INVALID SYNTAX HERE!!!"
         result = beancount.execute_query(LEDGER, query)
         assert len(result.errors) > 0
+
+
+class TestBQLColumnTypes:
+    """Typed-column regression tests: QueryResult.columns carries name + datatype."""
+
+    def test_column_info_shape(self, beancount):
+        """Each column is a ColumnInfo with name and datatype fields."""
+        _skip_if_no_beanquery()
+        result = beancount.execute_query(LEDGER, "SELECT account, sum(position) GROUP BY account")
+        assert len(result.errors) == 0
+        for col in result.columns:
+            assert hasattr(col, "name") and isinstance(col.name, str) and col.name
+            assert hasattr(col, "datatype") and isinstance(col.datatype, str) and col.datatype
+
+    def test_str_column_type(self, beancount):
+        """account and narration columns are typed 'str'."""
+        _skip_if_no_beanquery()
+        result = beancount.execute_query(LEDGER, "SELECT account, narration")
+        assert len(result.errors) == 0
+        by_name = {c.name: c.datatype for c in result.columns}
+        assert by_name.get("account") == "str"
+        assert by_name.get("narration") == "str"
+
+    def test_inventory_column_type(self, beancount):
+        """sum(position) is typed 'Inventory'."""
+        _skip_if_no_beanquery()
+        result = beancount.execute_query(LEDGER, "SELECT account, sum(position) GROUP BY account")
+        assert len(result.errors) == 0
+        by_name = {c.name: c.datatype for c in result.columns}
+        assert by_name.get("sum(position)") == "Inventory"
+
+    def test_date_column_type(self, beancount):
+        """date column is typed 'date'."""
+        _skip_if_no_beanquery()
+        result = beancount.execute_query(LEDGER, "SELECT date, narration")
+        assert len(result.errors) == 0
+        by_name = {c.name: c.datatype for c in result.columns}
+        assert by_name.get("date") == "date"
+
+    def test_int_column_type(self, beancount):
+        """count(*) is typed 'int'."""
+        _skip_if_no_beanquery()
+        result = beancount.execute_query(LEDGER, "SELECT count(*)")
+        assert len(result.errors) == 0
+        assert len(result.columns) == 1
+        assert result.columns[0].datatype == "int"

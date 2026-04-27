@@ -13,6 +13,7 @@ from implementations.adapter import (
     CAP_INCLUDES,
     CAP_PARSE,
     CAP_PLUGINS,
+    ColumnInfo,
     Directive,
     Implementation,
     ParseResult,
@@ -119,8 +120,12 @@ class BeancountV2Adapter:
         import json
 
         data = json.loads(result.stdout)
+        columns = [
+            ColumnInfo(name=c["name"], datatype=c["datatype"])
+            for c in data.get("columns", [])
+        ]
         return QueryResult(
-            columns=data.get("columns", []),
+            columns=columns,
             rows=data.get("rows", []),
             errors=data.get("errors", []),
         )

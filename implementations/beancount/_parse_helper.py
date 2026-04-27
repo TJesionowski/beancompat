@@ -210,6 +210,28 @@ def directive_to_dict(entry):
     return d
 
 
+_DTYPE_MAP = {
+    "builtins.str": "str",
+    "builtins.int": "int",
+    "builtins.bool": "bool",
+    "builtins.set": "set",
+    "decimal.Decimal": "Decimal",
+    "datetime.date": "date",
+    "beancount.core.amount.Amount": "Amount",
+    "beancount.core.inventory.Inventory": "Inventory",
+    "beancount.core.position.Position": "Position",
+}
+
+
+def _dtype_name(dtype) -> str:
+    if dtype is None:
+        return "unknown"
+    module = getattr(dtype, "__module__", "")
+    name = getattr(dtype, "__name__", str(dtype))
+    key = f"{module}.{name}" if module else name
+    return _DTYPE_MAP.get(key, name)
+
+
 def run_query(path, query_string):
     """Load a file and execute a BQL query, emitting JSON."""
     try:
@@ -218,7 +240,10 @@ def run_query(path, query_string):
         conn = beanquery.connect("beancount://" + path)
         result = conn.execute(query_string)
 
-        columns = [col.name for col in result.description]
+        columns = [
+            {"name": col.name, "datatype": _dtype_name(col.datatype)}
+            for col in result.description
+        ]
         rows = []
         for row in result:
             rows.append([str(v) if v is not None else None for v in row])
