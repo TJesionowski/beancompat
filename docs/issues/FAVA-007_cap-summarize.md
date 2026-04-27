@@ -1,7 +1,7 @@
 ---
 id: FAVA-007
 title: "CAP_SUMMARIZE for date-range windowing"
-status: open
+status: done
 priority: medium
 created: 2026-04-26
 category: FAVA
@@ -32,6 +32,10 @@ The fix is to add `CAP_SUMMARIZE`, an adapter method that clamps a loaded ledger
 - [ ] Reference implementation in the v3 adapter.
 - [ ] Fixtures covering: window with an entry exactly on the start boundary, window with an entry exactly on the end boundary, window with no entries, window with multiple currencies.
 - [ ] Fixtures pin the shape of generated opening and closing entries (account, narration, amount).
+
+## Resolution
+
+`CAP_SUMMARIZE = "summarize"` added to `implementations/adapter.py`. `clamp(source, start_date, end_date)` added to the `Implementation` protocol. v3 adapter (`implementations/beancount/__init__.py`) implements it via a new `run_clamp` function in `_parse_helper.py` that calls `summarize.clamp_opt`. `tests/test_summarize.py` adds 7 tests covering: start-boundary inclusion, end-boundary exclusion (exclusive), empty window, opening-entry narration shape, opening-entry equity posting, pre-window exclusion, and window boundary.
 
 ## References
 

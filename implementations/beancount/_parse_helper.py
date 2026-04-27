@@ -282,6 +282,26 @@ def run_hash(path):
     json.dump(hashes, sys.stdout)
 
 
+def run_clamp(path, start_date_str, end_date_str):
+    """Load a file, clamp to [start_date, end_date), and emit JSON."""
+    from datetime import date as _date
+
+    from beancount import loader
+    from beancount.ops import summarize
+
+    entries, errors, options = loader.load_file(path)
+    start = _date.fromisoformat(start_date_str)
+    end = _date.fromisoformat(end_date_str)
+    clamped, _idx = summarize.clamp_opt(entries, start, end, options)
+
+    output = {
+        "directives": [directive_to_dict(e) for e in clamped],
+        "errors": [str(e) for e in errors],
+        "options": {},
+    }
+    json.dump(output, sys.stdout, default=default_serializer)
+
+
 def main():
     path = sys.argv[1]
 
@@ -296,6 +316,10 @@ def main():
 
     if len(sys.argv) >= 3 and sys.argv[2] == "--hash":
         run_hash(path)
+        return
+
+    if len(sys.argv) >= 5 and sys.argv[2] == "--clamp":
+        run_clamp(path, sys.argv[3], sys.argv[4])
         return
 
     from beancount import loader

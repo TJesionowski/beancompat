@@ -65,6 +65,9 @@ CAP_FAVA = "fava"
 # Returns a stable hash per directive via compare.hash_entry (exclude_meta=True).
 # Used by Fava's edit-flow JSON API to identify entries across reload cycles.
 CAP_HASH = "hash"
+# Clamps a loaded ledger to a date range (opening-balance summarization +
+# closing truncation). Maps to beancount.ops.summarize.clamp_opt.
+CAP_SUMMARIZE = "summarize"
 
 
 class Implementation(Protocol):
@@ -110,6 +113,20 @@ class Implementation(Protocol):
         Alternative implementations that register plugins via constructor args,
         config files, or other mechanisms can implement this method with their
         native plugin-registration path rather than embedding option lines in source.
+        """
+        ...
+
+    def clamp(self, source: str, start_date: str, end_date: str) -> ParseResult:
+        """Return directives clamped to [start_date, end_date). Requires CAP_SUMMARIZE.
+
+        start_date: ISO 8601 date string, inclusive window start.
+        end_date: ISO 8601 date string, exclusive window end (one day past the last
+            desired date — matching beancount.ops.summarize.clamp_opt semantics).
+
+        Entries before start_date are summarized into opening-balance transactions
+        posted against the opening-balances equity account. Entries on or after
+        end_date are dropped. The ParseResult.directives list contains the clamped
+        entries including any generated opening-balance summarization transactions.
         """
         ...
 

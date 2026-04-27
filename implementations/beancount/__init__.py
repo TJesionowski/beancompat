@@ -15,6 +15,7 @@ from implementations.adapter import (
     CAP_PARSE,
     CAP_PLUGINS,
     CAP_PRINT,
+    CAP_SUMMARIZE,
     ColumnInfo,
     Directive,
     Implementation,
@@ -47,6 +48,7 @@ class BeancountAdapter:
             CAP_PRINT,
             CAP_FAVA,
             CAP_HASH,
+            CAP_SUMMARIZE,
         }
 
     def is_available(self) -> bool:
@@ -151,6 +153,44 @@ class BeancountAdapter:
     def parse_string_with_plugins(self, source: str, plugins: list[str]) -> ParseResult:
         prefix = "".join(f'plugin "{p}"\n' for p in plugins)
         return self.parse_string(prefix + source)
+
+    def clamp(self, source: str, start_date: str, end_date: str) -> ParseResult:
+        """Return directives clamped to [start_date, end_date) via clamp_opt."""
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".beancount", delete=False
+        ) as f:
+            f.write(source)
+            f.flush()
+            helper = Path(__file__).parent / "_parse_helper.py"
+            result = subprocess.run(
+                ["python3", str(helper), f.name, "--clamp", start_date, end_date],
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+        if result.returncode != 0:
+            return ParseResult(
+                directives=[],
+                errors=[f"beancount clamp exited with code {result.returncode}: {result.stderr}"],
+            )
+
+        import json
+
+        data = json.loads(result.stdout)
+        directives = [
+            Directive(
+                type=d["type"],
+                date=d["date"],
+                meta=d.get("meta", {}),
+                data=d.get("data", {}),
+            )
+            for d in data["directives"]
+        ]
+        return ParseResult(
+            directives=directives,
+            errors=data.get("errors", []),
+            options=data.get("options", {}),
+        )
 
     def load_as_fava(self, source: str) -> tuple[list, list, dict]:
         """Return live Python objects from beancount.loader.load_string.
