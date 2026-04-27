@@ -11,6 +11,12 @@
 - `test_<feature>_<behavior>` — Hand-written test for a specific behavior.
 - `test_<feature>_roundtrip` or `test_<feature>_no_errors` — Generative tests.
 
+## Capability-gated suites
+
+Some test files require a specific capability and skip automatically for adapters that don't advertise it:
+
+- `test_ingest.py` — requires `CAP_INGEST`. Tests `run_importer(importer, filepath)` against a trivial beangulp `Importer` subclass and a CSV fixture in `fixtures/ingest/`. Non-Python adapters are always skipped; only adapters that call beangulp can implement this.
+
 ## Running
 
 ```bash

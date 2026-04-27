@@ -12,6 +12,7 @@ from implementations.adapter import (
     CAP_FAVA,
     CAP_HASH,
     CAP_INCLUDES,
+    CAP_INGEST,
     CAP_PARSE,
     CAP_PLUGINS,
     CAP_PRINT,
@@ -49,6 +50,7 @@ class BeancountAdapter:
             CAP_FAVA,
             CAP_HASH,
             CAP_SUMMARIZE,
+            CAP_INGEST,
         }
 
     def is_available(self) -> bool:
@@ -201,6 +203,22 @@ class BeancountAdapter:
         from beancount import loader
 
         return loader.load_string(source)
+
+    def run_importer(self, importer, filepath: str) -> ParseResult:
+        """Extract directives from a file using a beangulp Importer."""
+        from implementations.beancount._parse_helper import directive_to_dict
+
+        entries = importer.extract(filepath, [])
+        directives = [
+            Directive(
+                type=d["type"],
+                date=d["date"],
+                meta=d.get("meta", {}),
+                data=d.get("data", {}),
+            )
+            for d in (directive_to_dict(e) for e in entries)
+        ]
+        return ParseResult(directives=directives, errors=[])
 
     def execute_query(self, source: str, query: str) -> QueryResult:
         """Execute a BQL query against beancount source via subprocess."""

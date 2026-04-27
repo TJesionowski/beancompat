@@ -1,7 +1,7 @@
 ---
 id: FAVA-008
 title: "CAP_INGEST — beangulp Importer ABC compatibility"
-status: open
+status: done
 priority: low
 created: 2026-04-26
 category: FAVA
@@ -10,7 +10,7 @@ tags: [capability, beangulp, deferred]
 
 # `CAP_INGEST` — beangulp `Importer` ABC compatibility
 
-**Status:** open (deferred)
+**Status:** done
 **Tier:** orthogonal to core beancount; required for full Fava-compat
 **Capability:** CAP_INGEST (new)
 
@@ -33,6 +33,10 @@ This is orthogonal to the core beancount API — beangulp is a separate package 
 - [ ] At least one minimal fixture: a CSV input + expected directive output through a trivial importer.
 - [ ] Reference adapter implementation that calls beangulp.
 - [ ] Documentation in `tests/README.md` (or a new `tests/ingest/README.md`) explaining the suite is opt-in via `CAP_INGEST`.
+
+## Resolution
+
+`CAP_INGEST` landed with `run_importer(importer, filepath) -> ParseResult`. The beancount adapter calls `importer.extract(filepath, [])` and converts namedtuples via `directive_to_dict`. 5 new tests in `tests/test_ingest.py` exercise a trivial `SimpleCsvImporter` against `fixtures/ingest/csv_simple.csv`. Suite: 311 passed, 119 skipped, 11 xfailed (+5 vs baseline). `tests/README.md` documents the suite as capability-gated.
 
 ## References
 

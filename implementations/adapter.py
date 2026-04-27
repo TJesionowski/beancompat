@@ -11,7 +11,7 @@ import subprocess
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol
 
 
 @dataclass
@@ -68,6 +68,9 @@ CAP_HASH = "hash"
 # Clamps a loaded ledger to a date range (opening-balance summarization +
 # closing truncation). Maps to beancount.ops.summarize.clamp_opt.
 CAP_SUMMARIZE = "summarize"
+# Runs a beangulp Importer against an input file and returns extracted
+# directives. Python-level only — non-Python adapters never advertise this.
+CAP_INGEST = "ingest"
 
 
 class Implementation(Protocol):
@@ -136,5 +139,15 @@ class Implementation(Protocol):
 
         Unlike parse_string (which is JSON-oriented and subprocess-based),
         this returns live Python objects and is allowed to run in-process.
+        """
+        ...
+
+    def run_importer(self, importer: Any, filepath: str) -> ParseResult:
+        """Extract directives from a file using a beangulp Importer. Requires CAP_INGEST.
+
+        importer: a beangulp.Importer instance.
+        filepath: path to the input file to extract from.
+        Returns extracted directives as a ParseResult (errors is always empty;
+        beangulp importers raise on failure rather than returning error objects).
         """
         ...
