@@ -1,0 +1,66 @@
+{
+  "name": "display_precision_by_currency",
+  "description": "Asserts display_precision_by_currency is derived from dcontext (inferred from transaction amounts). USD at 2dp and JPY at 0dp exercise different precisions. Key list derived from dcontext.build().fmtstrings (fava 1.30.12 / beancount v3).",
+  "source": "2024-01-01 open Assets:Checking USD\n2024-01-01 open Assets:JPY JPY\n2024-01-01 open Equity:Opening\n\n2024-01-02 * \"USD deposit\"\n  Assets:Checking    1234.56 USD\n  Equity:Opening    -1234.56 USD\n\n2024-01-02 * \"JPY deposit\"\n  Assets:JPY         160000 JPY\n  Equity:Opening    -160000 JPY\n",
+  "known_divergences": {
+    "beancount-parser": "Parser-only adapter; no loader, dcontext is uninitialised.",
+    "beancount-parser-lima": "Parser-only adapter; no loader, dcontext is uninitialised."
+  },
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "data": {
+          "account": "Assets:Checking",
+          "currencies": ["USD"],
+          "booking": null
+        }
+      },
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "data": {
+          "account": "Assets:JPY",
+          "currencies": ["JPY"],
+          "booking": null
+        }
+      },
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "data": {
+          "account": "Equity:Opening",
+          "currencies": [],
+          "booking": null
+        }
+      },
+      {
+        "type": "transaction",
+        "date": "2024-01-02",
+        "data": {
+          "flag": "*",
+          "payee": null,
+          "narration": "USD deposit",
+          "tags": [],
+          "links": []
+        }
+      },
+      {
+        "type": "transaction",
+        "date": "2024-01-02",
+        "data": {
+          "flag": "*",
+          "payee": null,
+          "narration": "JPY deposit",
+          "tags": [],
+          "links": []
+        }
+      }
+    ],
+    "options": {
+      "display_precision_by_currency": {"JPY": 0, "USD": 2}
+    }
+  }
+}

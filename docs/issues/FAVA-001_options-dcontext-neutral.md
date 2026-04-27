@@ -1,7 +1,7 @@
 ---
 id: FAVA-001
 title: "options.dcontext neutral representation"
-status: open
+status: done
 priority: medium
 created: 2026-04-26
 category: FAVA
@@ -32,6 +32,10 @@ The fix is to define a stable, neutral key (e.g. `display_precision_by_currency`
 - [ ] v2 adapter (`implementations/beancountv2/_parse_helper.py`) emits the same shape from v2's equivalent.
 - [ ] At least one fixture under `fixtures/` exercises the key with a multi-currency input.
 - [ ] No live `DisplayContext` object survives the JSON round-trip in any adapter.
+
+## Resolution
+
+`serialize_display_context()` added to both v3 and v2 `_parse_helper.py`, deriving `display_precision_by_currency` (dict[str, int]) from `dcontext.build().fmtstrings`. `fixtures/parse/display_precision_by_currency.json` exercises USD (2dp) and JPY (0dp). `fixtures/README.md` documents the key shape. beancount v3 and v2 pass; beancount-parser and beancount-parser-lima are xfailed (no loader).
 
 ## References
 

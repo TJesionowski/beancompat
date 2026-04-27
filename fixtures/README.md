@@ -59,7 +59,8 @@ pass `check/` fixtures as well.
 - `expected` *(object)* — lower-bound assertion on the parse output.
   - `errors` *(array of string)* — parse/check errors. Usually `[]` for happy-path fixtures.
   - `directives` *(array of object)* — expected directives in document order.
-  - `options` *(object, optional)* — options that must be present. Usually omitted; most options are implementation-specific.
+  - `options` *(object, optional)* — options that must be present. Usually omitted; most options are implementation-specific. Special keys:
+    - `display_precision_by_currency` *(object)* — per-currency display precision inferred from transaction amounts. Shape: `{"USD": 2, "JPY": 0}` (currency → integer decimal-place count). Derived from `dcontext.build().fmtstrings`; currencies with no explicit precision format are omitted. Parser-only adapters (no loader) emit `{}`.
 
 ### Directive shape
 

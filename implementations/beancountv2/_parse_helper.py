@@ -6,10 +6,34 @@ Usage: python3 _parse_helper.py <path.beancount>
 """
 
 import json
+import re
 import sys
 from datetime import date
 from decimal import Decimal
 from enum import Enum
+
+
+def serialize_display_context(dcontext):
+    """Extract per-currency display precision from a DisplayContext.
+
+    Returns a dict[str, int] mapping currency -> decimal places derived from
+    dcontext.build().fmtstrings. Currencies with no explicit precision (format
+    '{:f}') are excluded. Returns {} if dcontext is None or build() fails.
+    """
+    if dcontext is None:
+        return {}
+    try:
+        fmtstrings = dcontext.build().fmtstrings
+        result = {}
+        for currency, fmt in fmtstrings.items():
+            if currency == "__default__":
+                continue
+            m = re.search(r"\{:\.(\d+)f\}", fmt)
+            if m:
+                result[currency] = int(m.group(1))
+        return result
+    except Exception:
+        return {}
 
 
 def default_serializer(obj):
@@ -193,6 +217,10 @@ def main():
             serialized_options[k] = v
         elif isinstance(v, list) and all(isinstance(i, str) for i in v):
             serialized_options[k] = v
+
+    serialized_options["display_precision_by_currency"] = serialize_display_context(
+        options.get("dcontext")
+    )
 
     output = {
         "directives": [directive_to_dict(e) for e in entries],
