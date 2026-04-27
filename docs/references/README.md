@@ -38,4 +38,4 @@ Primary sources and existing resources that inform beancompat's design and test 
 | beancount | Python | Martin Blais | Reference implementation (v3) |
 | limabean | Rust | Simon Guest | Aims for compatibility |
 | TurboBean | ? | Moritz Drexl | Known divergence on inventory (vNext) |
-| rustledger | Rust | AI-assisted | Includes spec documents |
+| rustledger | Rust | AI-assisted | Includes spec documents; crates published at v0.14.0; CAP_PARSE adapter wired up |

@@ -1,7 +1,7 @@
 ---
 id: ADAPTER-003
 title: "Adapter: rustledger"
-status: open
+status: done
 priority: medium
 created: 2026-04-26
 category: ADAPTER
@@ -27,12 +27,16 @@ No directory exists for rustledger under `implementations/`. rustledger is inter
 
 ## Acceptance criteria
 
-- [ ] `implementations/rustledger/` created with adapter `__init__.py` implementing the `Implementation` protocol.
-- [ ] Helper binary (Cargo crate or wrapping a rustledger CLI) emits the portable JSON shape.
-- [ ] Adapter advertises whatever capabilities upstream supports (start with CAP_PARSE).
-- [ ] `is_available()` correctly reports false when the binary isn't built.
-- [ ] At least one cross-impl fixture either passes or has a `known_divergences` entry referencing the relevant section of rustledger's spec.
-- [ ] `docs/references/README.md` updated if rustledger's surface or status changes.
+- [x] `implementations/rustledger/` created with adapter `__init__.py` implementing the `Implementation` protocol.
+- [x] Helper binary (Cargo crate or wrapping a rustledger CLI) emits the portable JSON shape.
+- [x] Adapter advertises whatever capabilities upstream supports (start with CAP_PARSE).
+- [x] `is_available()` correctly reports false when the binary isn't built.
+- [x] At least one cross-impl fixture either passes or has a `known_divergences` entry referencing the relevant section of rustledger's spec.
+- [x] `docs/references/README.md` updated if rustledger's surface or status changes.
+
+## Resolution
+
+CAP_PARSE adapter landed. `rustledger-loader` v0.14.0 exposes `Loader::new().load(path)` without features; the helper binary maps all 12 directive types to the portable JSON schema. All parse-tier fixtures pass or have documented known_divergences: `display_precision_by_currency` (DisplayContext.precisions is private) and `options_coverage` (beancount v3-only keys absent, `tolerance_multiplier` aliased to `inferred_tolerance_multiplier`). Build requires `--ignore-rust-version` since system Rust is 1.93.0 and rustledger declares `rust-version = "1.94"`. Suite: 306 passed, 119 skipped, 11 xfailed (+24 vs baseline).
 
 ## References
 

@@ -6,7 +6,8 @@
     "beancount-parser": "Parser-only adapter; no loader, options map is empty.",
     "beancount-parser-lima": "Parser-only adapter; no loader, options map is empty.",
     "beancount-v2": "beancount v2 omits booking_method, commodities, display_precision, inferred_tolerance_default, tolerance_multiplier, inferred_tolerance_multiplier, account_unrealized_gains, and pythonpath; v3-only options trigger parse errors.",
-    "limabean": "beancount-parser-lima does not support plugin_processing_mode, infer_tolerance_from_cost, render_commas, or booking_method options; parse error on unknown options."
+    "limabean": "beancount-parser-lima does not support plugin_processing_mode, infer_tolerance_from_cost, render_commas, or booking_method options; parse error on unknown options.",
+    "rustledger": "rustledger omits beancount v3-only options (commodities, plugin, pythonpath, insert_pythonpath, allow_deprecated_none_for_tags_and_links); tolerance_multiplier is aliased to inferred_tolerance_multiplier so the user-set value (2.0) overwrites the default (0.5), and the two keys cannot be reported separately."
   },
   "expected": {
     "errors": [],

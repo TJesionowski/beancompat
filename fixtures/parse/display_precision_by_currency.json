@@ -5,7 +5,8 @@
   "known_divergences": {
     "beancount-parser": "Parser-only adapter; no loader, dcontext is uninitialised.",
     "beancount-parser-lima": "Parser-only adapter; no loader, dcontext is uninitialised.",
-    "limabean": "beancount-parser-lima is parse-only; dcontext is not computed, so display_precision_by_currency is absent from options."
+    "limabean": "beancount-parser-lima is parse-only; dcontext is not computed, so display_precision_by_currency is absent from options.",
+    "rustledger": "rustledger-loader's DisplayContext has no public iterator over inferred precisions; display_precision_by_currency is absent from options."
   },
   "expected": {
     "errors": [],

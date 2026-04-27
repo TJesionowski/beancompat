@@ -8,6 +8,7 @@ from implementations.beancountparser import BeancountParserAdapter
 from implementations.beancountparserlima import BeancountParserLimaAdapter
 from implementations.beancountv2 import BeancountV2Adapter
 from implementations.limabean import LimabeanAdapter
+from implementations.rustledger import RustledgerAdapter
 
 ADAPTERS = {
     "beancount": BeancountAdapter,
@@ -15,6 +16,7 @@ ADAPTERS = {
     "beancount-parser": BeancountParserAdapter,
     "beancount-parser-lima": BeancountParserLimaAdapter,
     "limabean": LimabeanAdapter,
+    "rustledger": RustledgerAdapter,
 }
 
 
