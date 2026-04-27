@@ -1,7 +1,7 @@
 ---
 id: ADAPTER-001
 title: "Adapter: limabean"
-status: in-progress
+status: done
 priority: high
 created: 2026-04-26
 category: ADAPTER
@@ -30,13 +30,13 @@ The existing `implementations/beancountparserlima/` adapter is the closest analo
 
 ## Acceptance criteria
 
-- [ ] `implementations/limabean/__init__.py` implementing the `Implementation` protocol.
-- [ ] Cargo crate (under `implementations/limabean/`) that wraps the library and emits the portable JSON shape used by other adapters.
-- [ ] Adapter advertises CAP_PARSE and CAP_BOOKING.
-- [ ] `is_available()` correctly reports false when the helper binary isn't built.
-- [ ] At least one `check/` fixture passes against limabean.
-- [ ] Any divergence from the reference impl is recorded as a `known_divergences` entry on the relevant fixture (precedent: `fixtures/parse/open_multi_currency.json`).
-- [ ] Build instructions added to `implementations/limabean/` (or a top-level `BUILDING.md`) so contributors know to run `cargo build --release`.
+- [x] `implementations/limabean/__init__.py` implementing the `Implementation` protocol.
+- [x] Cargo crate (under `implementations/limabean/`) that wraps the library and emits the portable JSON shape used by other adapters.
+- [x] Adapter advertises CAP_PARSE and CAP_BOOKING.
+- [x] `is_available()` correctly reports false when the helper binary isn't built.
+- [x] At least one `check/` fixture passes against limabean (all 3 check/ fixtures pass).
+- [x] Any divergence from the reference impl is recorded as a `known_divergences` entry on the relevant fixture (3 parse-tier divergences from beancount-parser-lima limitations added).
+- [x] Build instructions in `implementations/limabean/__init__.py` docstring: `cd implementations/limabean && cargo build --release`.
 
 ## References
 
@@ -47,6 +47,6 @@ The existing `implementations/beancountparserlima/` adapter is the closest analo
 - beancompat: `implementations/limabean/` (stub), `implementations/adapter.py` (protocol)
 - Skill: `/update-implementations`
 
-## Progress
+## Resolution
 
-Scaffold landed: `implementations/limabean/__init__.py` (Python adapter, CAP_PARSE + CAP_BOOKING declared), `Cargo.toml` (`limabean-booking = "0.10"` with `lima-parser-types` feature, `beancount-parser-lima = "0.16"`), `src/main.rs` (parse path complete; booking loop is a well-commented TODO). `LimabeanAdapter` registered in `tests/conftest.py`. Remaining: implement `PostingSpec` for the parser's posting type and the per-transaction `limabean_booking::book()` loop in `src/main.rs`, then verify with a `check/` fixture.
+Full booking integration landed. The `lima-parser-types` feature provides all trait impls (`PostingSpec`, `CostSpec`, `PriceSpec`, `LimaTolerance`) — no manual implementation needed. `src/main.rs` uses a two-pass approach: first pass collects `Open` directives to build the account→booking-method map, second pass runs `limabean_booking::book()` per transaction and zips booked `Interpolated` postings with originals for flag/meta serialization. All 3 `check/` fixtures pass; 3 parse-tier `known_divergences` added for beancount-parser-lima limitations (no dcontext, unsupported options, non-deterministic currency order). Suite: 282 passed, 94 skipped, 9 xfailed (+26 vs baseline).

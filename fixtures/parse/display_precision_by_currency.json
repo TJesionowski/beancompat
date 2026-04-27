@@ -4,7 +4,8 @@
   "source": "2024-01-01 open Assets:Checking USD\n2024-01-01 open Assets:JPY JPY\n2024-01-01 open Equity:Opening\n\n2024-01-02 * \"USD deposit\"\n  Assets:Checking    1234.56 USD\n  Equity:Opening    -1234.56 USD\n\n2024-01-02 * \"JPY deposit\"\n  Assets:JPY         160000 JPY\n  Equity:Opening    -160000 JPY\n",
   "known_divergences": {
     "beancount-parser": "Parser-only adapter; no loader, dcontext is uninitialised.",
-    "beancount-parser-lima": "Parser-only adapter; no loader, dcontext is uninitialised."
+    "beancount-parser-lima": "Parser-only adapter; no loader, dcontext is uninitialised.",
+    "limabean": "beancount-parser-lima is parse-only; dcontext is not computed, so display_precision_by_currency is absent from options."
   },
   "expected": {
     "errors": [],

@@ -5,7 +5,8 @@
   "known_divergences": {
     "beancount-parser": "Parser-only adapter; no loader, options map is empty.",
     "beancount-parser-lima": "Parser-only adapter; no loader, options map is empty.",
-    "beancount-v2": "beancount v2 omits booking_method, commodities, display_precision, inferred_tolerance_default, tolerance_multiplier, inferred_tolerance_multiplier, account_unrealized_gains, and pythonpath; v3-only options trigger parse errors."
+    "beancount-v2": "beancount v2 omits booking_method, commodities, display_precision, inferred_tolerance_default, tolerance_multiplier, inferred_tolerance_multiplier, account_unrealized_gains, and pythonpath; v3-only options trigger parse errors.",
+    "limabean": "beancount-parser-lima does not support plugin_processing_mode, infer_tolerance_from_cost, render_commas, or booking_method options; parse error on unknown options."
   },
   "expected": {
     "errors": [],

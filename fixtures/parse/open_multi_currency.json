@@ -3,7 +3,8 @@
   "description": "Open directive with multiple allowed currencies. Reference (beancount v3) preserves source order.",
   "source": "2024-01-01 open Assets:Bank USD,EUR,GBP\n",
   "known_divergences": {
-    "beancount-parser-lima": "Currency list order is non-deterministic across runs (appears to iterate a HashSet with randomized hashing) rather than preserving source order."
+    "beancount-parser-lima": "Currency list order is non-deterministic across runs (appears to iterate a HashSet with randomized hashing) rather than preserving source order.",
+    "limabean": "Currency list order is non-deterministic across runs (appears to iterate a HashSet with randomized hashing) rather than preserving source order."
   },
   "expected": {
     "errors": [],
