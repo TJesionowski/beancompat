@@ -1,3 +1,13 @@
+---
+id: FAVA-008
+title: "CAP_INGEST — beangulp Importer ABC compatibility"
+status: open
+priority: low
+created: 2026-04-26
+category: FAVA
+tags: [capability, beangulp, deferred]
+---
+
 # `CAP_INGEST` — beangulp `Importer` ABC compatibility
 
 **Status:** open (deferred)

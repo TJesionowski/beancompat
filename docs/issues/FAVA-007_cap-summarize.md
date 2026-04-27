@@ -1,3 +1,13 @@
+---
+id: FAVA-007
+title: "CAP_SUMMARIZE for date-range windowing"
+status: open
+priority: medium
+created: 2026-04-26
+category: FAVA
+tags: [capability, summarize]
+---
+
 # `CAP_SUMMARIZE` for date-range windowing
 
 **Status:** open

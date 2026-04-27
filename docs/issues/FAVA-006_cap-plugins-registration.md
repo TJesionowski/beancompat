@@ -1,3 +1,13 @@
+---
+id: FAVA-006
+title: "CAP_PLUGINS registration adapter method"
+status: open
+priority: medium
+created: 2026-04-26
+category: FAVA
+tags: [capability, plugins]
+---
+
 # `CAP_PLUGINS` registration adapter method
 
 **Status:** open

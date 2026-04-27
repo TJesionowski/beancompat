@@ -1,3 +1,13 @@
+---
+id: ADAPTER-002
+title: "Adapter: TurboBean"
+status: open
+priority: medium
+created: 2026-04-26
+category: ADAPTER
+tags: [vNext, divergence]
+---
+
 # Adapter: TurboBean
 
 **Status:** open

@@ -1,3 +1,13 @@
+---
+id: FAVA-003
+title: "CAP_HASH capability and hash_entries adapter method"
+status: open
+priority: medium
+created: 2026-04-26
+category: FAVA
+tags: [capability, fava-edit-flow]
+---
+
 # `CAP_HASH` capability and `hash_entries` adapter method
 
 **Status:** open

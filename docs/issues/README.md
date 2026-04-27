@@ -1,64 +1,81 @@
 # Issues
 
-Open work items, one file per item. Broken out from the README's Fava-compat coverage roadmap so each item has room for context, acceptance criteria, and references without bloating the README.
+Open work items, one file per item. Each file has YAML frontmatter for programmatic tracking (status, priority, category) and prose sections for context, acceptance criteria, and references.
 
 ## Format
 
-Each issue file is plain markdown — no frontmatter — with this shape:
+Each issue file has this shape:
 
 ```markdown
-# <Title>
+---
+id: CATEGORY-NNN
+title: "Short title"
+status: open | in-progress | blocked | done | wontfix
+priority: low | medium | high | critical
+created: YYYY-MM-DD
+category: ADAPTER | FAVA | BUG | TASK
+tags: [optional, list]
+---
 
-**Status:** open | resolved | wontfix
-**Tier:** parse | check | round-trip | Fava-compat (CAP_FAVA) | other
-**Capability:** CAP_HASH | CAP_SUMMARIZE | …  (omit if N/A)
+# Title
 
 ## Problem
-<one or two paragraphs: the gap and why it matters>
-
 ## Context
-<Fava-side anchors, beancompat-side files that would change>
-
 ## Acceptance criteria
-- [ ] <concrete check>
-- [ ] <concrete check>
-
 ## References
-- Fava: `<path>`
-- beancompat: `<path>`
-- Memory: `.claude/memory/<file>`
 ```
 
-Status conventions:
+**YAML frontmatter is required.** The `/issues-drive` skill mutates `status` programmatically and will fail on plain-markdown issues.
 
-- **open** — not started, partially done, or in progress.
-- **resolved** — done; keep the file with a one-line note pointing to the resolving commit or PR.
-- **wontfix** — captured for visibility but not actionable in this repo (e.g. the gap belongs upstream).
+Filename convention: `{ID}_{slug}.md` — e.g. `FAVA-001_options-dcontext-neutral.md`.
+
+## Categories
+
+- **ADAPTER** — wiring up external implementation adapters
+- **FAVA** — Fava-compat coverage items (capabilities, fixtures, schema)
+- **BUG** — defects in beancompat itself
+- **TASK** — general infrastructure or process work
+
+## Usage
+
+```bash
+python scripts/issues.py list
+python scripts/issues.py list --status=open --sort=priority
+python scripts/issues.py list --status=in-progress --sort=priority
+python scripts/issues.py list --category=FAVA
+python scripts/issues.py validate
+```
+
+## Companion skills
+
+- `/issues-drive` — attended-loop worker: picks one open/in-progress issue per invocation, executes it, and commits.
+- `/issues-update` — audit issues against current repo state; mark resolved, add new, refresh facts.
+- `/issues-init` — initialize a fresh tracker (stops if `docs/issues/` already exists).
 
 ## Open — Fava-compat coverage
 
-| Issue | Capability | Notes |
-|---|---|---|
-| [`options.dcontext` neutral representation](options-dcontext-neutral.md) | CAP_FAVA | Replace live `DisplayContext` with a stable neutral key |
-| [`MISSING` sentinel tag](missing-sentinel.md) | CAP_PRINT, CAP_FAVA | Round-trip preserves `MISSING` identity |
-| [`CAP_HASH` + `hash_entries`](cap-hash.md) | CAP_HASH (new) | Stable hashes for Fava's edit-flow API |
-| [Typed columns in `QueryResult`](typed-query-columns.md) | CAP_BQL, CAP_FAVA | `column.datatype` tags in query output |
-| [30-key `options` coverage fixture](options-coverage-fixture.md) | CAP_FAVA | Enumerate the BeancountOptions keys Fava reads |
-| [`CAP_PLUGINS` registration method](cap-plugins-registration.md) | CAP_PLUGINS | Adapter-level plugin registration |
-| [`CAP_SUMMARIZE` for date-range windowing](cap-summarize.md) | CAP_SUMMARIZE (new) | Opening/closing entry semantics |
-| [`CAP_INGEST` (deferred)](cap-ingest.md) | CAP_INGEST (new) | beangulp `Importer` ABC compat |
+| ID | Issue | Capability | Priority |
+|---|---|---|---|
+| FAVA-001 | [`options.dcontext` neutral representation](FAVA-001_options-dcontext-neutral.md) | CAP_FAVA | medium |
+| FAVA-002 | [`MISSING` sentinel tag](FAVA-002_missing-sentinel.md) | CAP_PRINT, CAP_FAVA | medium |
+| FAVA-003 | [`CAP_HASH` + `hash_entries`](FAVA-003_cap-hash.md) | CAP_HASH (new) | medium |
+| FAVA-004 | [Typed columns in `QueryResult`](FAVA-004_typed-query-columns.md) | CAP_BQL, CAP_FAVA | medium |
+| FAVA-005 | [30-key `options` coverage fixture](FAVA-005_options-coverage-fixture.md) | CAP_FAVA | high |
+| FAVA-006 | [`CAP_PLUGINS` registration method](FAVA-006_cap-plugins-registration.md) | CAP_PLUGINS | medium |
+| FAVA-007 | [`CAP_SUMMARIZE` for date-range windowing](FAVA-007_cap-summarize.md) | CAP_SUMMARIZE (new) | medium |
+| FAVA-008 | [`CAP_INGEST` (deferred)](FAVA-008_cap-ingest.md) | CAP_INGEST (new) | low |
 
 ## Open — Implementation adapters
 
-| Issue | Language | Notes |
-|---|---|---|
-| [Adapter: limabean](adapter-limabean.md) | Rust | Stub directory exists; first booking-capable Rust adapter |
-| [Adapter: TurboBean](adapter-turbobean.md) | TBD | Stub directory exists; vNext divergence target |
-| [Adapter: rustledger](adapter-rustledger.md) | Rust | Ships its own AI-assisted spec — divergence audit opportunity |
-| [Adapters: Dart / Zig / Clojure](adapter-other-languages.md) | various | Tracking issue; split off as projects firm up |
+| ID | Issue | Language | Priority |
+|---|---|---|---|
+| ADAPTER-001 | [Adapter: limabean](ADAPTER-001_adapter-limabean.md) | Rust | high |
+| ADAPTER-002 | [Adapter: TurboBean](ADAPTER-002_adapter-turbobean.md) | TBD | medium |
+| ADAPTER-003 | [Adapter: rustledger](ADAPTER-003_adapter-rustledger.md) | Rust | medium |
+| ADAPTER-004 | [Adapters: Dart / Zig / Clojure](ADAPTER-004_adapter-other-languages.md) | various | low |
 
 ## Wontfix
 
-| Issue | Reason |
-|---|---|
-| [`loader._load(...)` private-API parity](loader-private-api.md) | Fava-side wart; fix belongs upstream |
+| ID | Issue | Reason |
+|---|---|---|
+| FAVA-009 | [`loader._load(...)` private-API parity](FAVA-009_loader-private-api.md) | Fava-side wart; fix belongs upstream |

@@ -1,3 +1,13 @@
+---
+id: ADAPTER-003
+title: "Adapter: rustledger"
+status: open
+priority: medium
+created: 2026-04-26
+category: ADAPTER
+tags: [rust]
+---
+
 # Adapter: rustledger
 
 **Status:** open

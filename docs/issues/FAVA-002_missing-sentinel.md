@@ -1,3 +1,13 @@
+---
+id: FAVA-002
+title: "MISSING sentinel tag in the portable schema"
+status: open
+priority: medium
+created: 2026-04-26
+category: FAVA
+tags: [schema, round-trip]
+---
+
 # `MISSING` sentinel tag in the portable schema
 
 **Status:** open

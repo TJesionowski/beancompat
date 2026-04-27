@@ -1,3 +1,13 @@
+---
+id: FAVA-009
+title: "loader._load(...) private-API parity"
+status: wontfix
+priority: low
+created: 2026-04-26
+category: FAVA
+tags: [wontfix]
+---
+
 # `loader._load(...)` private-API parity
 
 **Status:** wontfix

@@ -1,3 +1,13 @@
+---
+id: FAVA-005
+title: "30-key options coverage fixture"
+status: open
+priority: high
+created: 2026-04-26
+category: FAVA
+tags: [options, fixture]
+---
+
 # 30-key `options` coverage fixture
 
 **Status:** open
@@ -12,7 +22,7 @@ The fix is to seed a fixture that explicitly enumerates the BeancountOptions key
 ## Context
 
 - **Fava-side:** `src/fava/beans/types.py` defines `BeancountOptions` as the canonical enumeration. Pull the key list directly from there.
-- **beancompat-side:** New fixture under `fixtures/parse/` (or a new `fixtures/options/` subdirectory). Adapters emit the options map via `_parse_helper.py`. Related to `options-dcontext-neutral.md` (which converts one of those keys to a neutral shape).
+- **beancompat-side:** New fixture under `fixtures/parse/` (or a new `fixtures/options/` subdirectory). Adapters emit the options map via `_parse_helper.py`. Related to `FAVA-001_options-dcontext-neutral.md` (which converts one of those keys to a neutral shape).
 
 ## Acceptance criteria
 
@@ -26,4 +36,4 @@ The fix is to seed a fixture that explicitly enumerates the BeancountOptions key
 - Fava: `src/fava/beans/types.py` (BeancountOptions TypedDict)
 - beancompat: `fixtures/parse/`, `fixtures/README.md`, `implementations/beancount/_parse_helper.py`
 - Memory: `.claude/memory/fava_contract_surface.md`
-- Related: `docs/issues/options-dcontext-neutral.md`
+- Related: `FAVA-001_options-dcontext-neutral.md`

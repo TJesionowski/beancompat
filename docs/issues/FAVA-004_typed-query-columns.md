@@ -1,3 +1,13 @@
+---
+id: FAVA-004
+title: "Typed columns in QueryResult"
+status: open
+priority: medium
+created: 2026-04-26
+category: FAVA
+tags: [bql, query]
+---
+
 # Typed columns in `QueryResult`
 
 **Status:** open

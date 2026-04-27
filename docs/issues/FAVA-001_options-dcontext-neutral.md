@@ -1,3 +1,13 @@
+---
+id: FAVA-001
+title: "options.dcontext neutral representation"
+status: open
+priority: medium
+created: 2026-04-26
+category: FAVA
+tags: [options, display-context]
+---
+
 # `options.dcontext` neutral representation
 
 **Status:** open
@@ -13,7 +23,7 @@ The fix is to define a stable, neutral key (e.g. `display_precision_by_currency`
 
 - **Fava-side:** `src/fava/beans/types.py` enumerates the `BeancountOptions` keys Fava actually reads. The dcontext-derived precision is one of them.
 - **beancompat-side:** `implementations/beancount/_parse_helper.py` (and the v2 helper) emit the options map; both currently either skip or dump the dcontext object. The portable schema in `fixtures/README.md` does not document any options-shape conventions.
-- The new key needs a fixture under `fixtures/parse/` (or a new `fixtures/options/` group — see also `options-coverage-fixture.md`).
+- The new key needs a fixture under `fixtures/parse/` (or a new `fixtures/options/` group — see also `FAVA-005_options-coverage-fixture.md`).
 
 ## Acceptance criteria
 

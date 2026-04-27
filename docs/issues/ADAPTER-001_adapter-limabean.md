@@ -1,3 +1,13 @@
+---
+id: ADAPTER-001
+title: "Adapter: limabean"
+status: open
+priority: high
+created: 2026-04-26
+category: ADAPTER
+tags: [rust, booking]
+---
+
 # Adapter: limabean
 
 **Status:** open

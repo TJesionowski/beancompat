@@ -1,3 +1,13 @@
+---
+id: ADAPTER-004
+title: "Adapters: Dart / Zig / Clojure efforts"
+status: open
+priority: low
+created: 2026-04-26
+category: ADAPTER
+tags: [tracking]
+---
+
 # Adapters: Dart / Zig / Clojure efforts
 
 **Status:** open (tracking)
