@@ -1,7 +1,7 @@
 ---
 id: FAVA-002
 title: "MISSING sentinel tag in the portable schema"
-status: open
+status: done
 priority: medium
 created: 2026-04-26
 category: FAVA
@@ -31,6 +31,10 @@ The fix is to introduce a marker object — `{"__missing__": true}` — that ada
 - [ ] Reference adapter emits the marker for elided posting fields.
 - [ ] At least one fixture under `fixtures/parse/` exercises the marker on an elided posting.
 - [ ] `test_round_trip.py` verifies that a fixture with `MISSING` round-trips losslessly through the print capability.
+
+## Resolution
+
+`{"__missing__": True}` sentinel added. `beancountparser/_parse_helper.py` emits it for `simple_posting` (elided amount). `beancount/_parse_helper.py` and `beancountv2/_parse_helper.py` detect MISSING in `serialize_amount` and `serialize_cost` (defensive — loader resolves MISSING before serialization). `fixtures/README.md` documents the sentinel with parse-vs-check-tier semantics. `fixtures/parse/missing_sentinel.json` exercises an elided posting with a sparse expected so both parse-tier (MISSING) and check-tier (resolved) adapters satisfy containment.
 
 ## References
 

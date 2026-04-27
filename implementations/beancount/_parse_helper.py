@@ -12,8 +12,10 @@ from datetime import date
 from decimal import Decimal
 from enum import Enum
 
+from beancount.core.number import MISSING as _BC_MISSING
 
 _UNSERIALIZABLE = object()
+_MISSING_SENTINEL = {"__missing__": True}
 
 
 def serialize_display_context(dcontext):
@@ -90,6 +92,8 @@ def serialize_amount(amount):
     """Serialize a beancount Amount to dict."""
     if amount is None:
         return None
+    if amount is _BC_MISSING:
+        return _MISSING_SENTINEL
     return {"number": str(amount.number), "currency": amount.currency}
 
 
@@ -113,9 +117,11 @@ def serialize_cost(cost):
 
     if is_spec:
         if getattr(cost, "number_per", None) is not None:
-            result["number_per"] = str(cost.number_per)
+            v = cost.number_per
+            result["number_per"] = _MISSING_SENTINEL if v is _BC_MISSING else str(v)
         if getattr(cost, "number_total", None) is not None:
-            result["number_total"] = str(cost.number_total)
+            v = cost.number_total
+            result["number_total"] = _MISSING_SENTINEL if v is _BC_MISSING else str(v)
         if getattr(cost, "merge", None) is not None:
             result["merge"] = bool(cost.merge)
     else:
@@ -123,7 +129,8 @@ def serialize_cost(cost):
             result["number"] = str(cost.number)
 
     if getattr(cost, "currency", None) is not None:
-        result["currency"] = cost.currency
+        v = cost.currency
+        result["currency"] = _MISSING_SENTINEL if v is _BC_MISSING else v
     if getattr(cost, "date", None) is not None:
         result["date"] = cost.date.isoformat()
     if getattr(cost, "label", None) is not None:

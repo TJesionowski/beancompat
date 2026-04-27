@@ -87,7 +87,21 @@ Type-specific `data` fields (see `scripts/generate_fixtures.py` and `implementat
 | `note`        | `account`, `comment` |
 | `event`       | `type`, `description` |
 
-Posting shape: `{account, units: {number, currency} | null, cost: Cost | CostSpec | null, price: {number, currency} | null, flag: string | null, meta: object}`.
+Posting shape: `{account, units: {number, currency} | {"__missing__": true} | null, cost: Cost | CostSpec | null, price: {number, currency} | null, flag: string | null, meta: object}`.
+
+#### MISSING sentinel
+
+`{"__missing__": true}` marks a field that was present in source but left blank for auto-resolution during booking. It is semantically distinct from `null` (field is absent) and from a concrete value (field was explicitly set).
+
+At **parse tier** (before booking), parser-only adapters emit this sentinel wherever the source had an elided value:
+- `posting.units` — posting with no amount (e.g., `  Equity:Opening` with no number)
+- `posting.cost.number_per`, `posting.cost.number_total`, `posting.cost.currency` — empty or partial cost spec (e.g., `{50 USD}` resolves `currency` but not `number_per`)
+
+At **check tier** (after booking/interpolation), all MISSING fields are resolved to concrete values by the loader. Check-tier adapters (beancount v2/v3) never emit this sentinel.
+
+Fixtures in `fixtures/parse/` may capture elided postings; their `expected` sections omit the `units` key for those postings so both parse-tier (MISSING) and check-tier (resolved) adapters satisfy containment.
+
+#### Cost vs CostSpec
 
 Cost vs CostSpec — a posting's `cost` field carries a `kind` discriminator:
 

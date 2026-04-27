@@ -510,7 +510,7 @@ def extract_posting(posting_tree):
         account = str(inner.children[1])
         return {
             "account": account,
-            "units": None,
+            "units": {"__missing__": True},  # amount elided in source — to be resolved during booking
             "cost": None,
             "price": None,
             "flag": flag,

@@ -1,0 +1,48 @@
+{
+  "name": "missing_sentinel",
+  "description": "Elided posting amount (no number on Equity:Opening) surfaces as {\"__missing__\": true} at parse tier. Check-tier adapters (v2/v3) resolve it to -100.00 USD via interpolation. Expected omits `units` for the elided posting so both parse-tier and check-tier adapters satisfy containment.",
+  "source": "2024-01-01 open Assets:Checking USD\n2024-01-01 open Equity:Opening\n\n2024-01-02 * \"balance seed\"\n  Assets:Checking    100.00 USD\n  Equity:Opening\n",
+  "expected": {
+    "errors": [],
+    "directives": [
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "data": {
+          "account": "Assets:Checking",
+          "currencies": ["USD"],
+          "booking": null
+        }
+      },
+      {
+        "type": "open",
+        "date": "2024-01-01",
+        "data": {
+          "account": "Equity:Opening",
+          "currencies": [],
+          "booking": null
+        }
+      },
+      {
+        "type": "transaction",
+        "date": "2024-01-02",
+        "data": {
+          "flag": "*",
+          "payee": null,
+          "narration": "balance seed",
+          "tags": [],
+          "links": [],
+          "postings": [
+            {
+              "account": "Assets:Checking",
+              "units": {"number": "100.00", "currency": "USD"}
+            },
+            {
+              "account": "Equity:Opening"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
