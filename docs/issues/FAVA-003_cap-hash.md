@@ -1,7 +1,7 @@
 ---
 id: FAVA-003
 title: "CAP_HASH capability and hash_entries adapter method"
-status: open
+status: done
 priority: medium
 created: 2026-04-26
 category: FAVA
@@ -33,6 +33,10 @@ The fix is to add a new capability `CAP_HASH` and a corresponding adapter method
 - [ ] Reference (beancount v3) adapter implements `hash_entries` via the public `compare.hash_entry` API.
 - [ ] At least one fixture asserts the hash for a small canonical input (regression test for the reference impl).
 - [ ] Test skips cleanly on adapters that do not declare `CAP_HASH`.
+
+## Resolution
+
+`CAP_HASH = "hash"` added to `implementations/adapter.py`. `hash_entries(source: str) -> list[str]` added to the `Implementation` protocol (exclude_meta=True for path-independent stability). Reference adapter (`implementations/beancount/__init__.py`) implements it via `_parse_helper.py --hash`, which calls `compare.hash_entry(entry, exclude_meta=True)` on each loaded directive. `tests/test_hash.py` verifies stability, count parity, hex-string format, and pins beancount v3 hashes for a canonical 3-directive source as a regression guard.
 
 ## References
 

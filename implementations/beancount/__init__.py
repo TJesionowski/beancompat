@@ -10,6 +10,7 @@ from implementations.adapter import (
     CAP_BOOKING,
     CAP_BQL,
     CAP_FAVA,
+    CAP_HASH,
     CAP_INCLUDES,
     CAP_PARSE,
     CAP_PLUGINS,
@@ -44,6 +45,7 @@ class BeancountAdapter:
             CAP_INCLUDES,
             CAP_PRINT,
             CAP_FAVA,
+            CAP_HASH,
         }
 
     def is_available(self) -> bool:
@@ -122,6 +124,28 @@ class BeancountAdapter:
                 f"beancount format exited with code {result.returncode}: {result.stderr}"
             )
         return result.stdout
+
+    def hash_entries(self, source: str) -> list[str]:
+        """Return stable hashes (exclude_meta=True) for each directive in source."""
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".beancount", delete=False
+        ) as f:
+            f.write(source)
+            f.flush()
+            helper = Path(__file__).parent / "_parse_helper.py"
+            result = subprocess.run(
+                ["python3", str(helper), f.name, "--hash"],
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"beancount hash exited with code {result.returncode}: {result.stderr}"
+            )
+        import json
+
+        return json.loads(result.stdout)
 
     def load_as_fava(self, source: str) -> tuple[list, list, dict]:
         """Return live Python objects from beancount.loader.load_string.

@@ -54,6 +54,9 @@ CAP_PRINT = "print"
 # Python frontend (e.g. a bindings module that wraps native output into
 # beancount-namedtuple-compatible objects).
 CAP_FAVA = "fava"
+# Returns a stable hash per directive via compare.hash_entry (exclude_meta=True).
+# Used by Fava's edit-flow JSON API to identify entries across reload cycles.
+CAP_HASH = "hash"
 
 
 class Implementation(Protocol):
@@ -83,6 +86,14 @@ class Implementation(Protocol):
 
     def format_source(self, source: str) -> str:
         """Parse beancount source and re-serialize it. Requires CAP_PRINT."""
+        ...
+
+    def hash_entries(self, source: str) -> list[str]:
+        """Return a stable hash for each directive in source. Requires CAP_HASH.
+
+        Hashes are computed with exclude_meta=True so they are stable across
+        different file paths and line numbers. Order matches parse output.
+        """
         ...
 
     def load_as_fava(self, source: str) -> tuple[list, list, dict]:

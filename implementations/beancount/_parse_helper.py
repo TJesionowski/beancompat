@@ -247,6 +247,16 @@ def run_format(path):
     printer.print_entries(entries, file=sys.stdout)
 
 
+def run_hash(path):
+    """Load a file and emit a JSON list of per-entry hashes (exclude_meta=True)."""
+    from beancount import loader
+    from beancount.core import compare
+
+    entries, _errors, _options = loader.load_file(path)
+    hashes = [compare.hash_entry(e, exclude_meta=True) for e in entries]
+    json.dump(hashes, sys.stdout)
+
+
 def main():
     path = sys.argv[1]
 
@@ -257,6 +267,10 @@ def main():
 
     if len(sys.argv) >= 3 and sys.argv[2] == "--format":
         run_format(path)
+        return
+
+    if len(sys.argv) >= 3 and sys.argv[2] == "--hash":
+        run_hash(path)
         return
 
     from beancount import loader
