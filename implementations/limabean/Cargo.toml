@@ -1,0 +1,17 @@
+[package]
+name = "beancompat-limabean-helper"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "limabean-helper"
+path = "src/main.rs"
+
+[dependencies]
+beancount-parser-lima = "0.16"
+# limabean-booking bridges the parser types; "lima-parser-types" provides
+# LimaParserBookingTypes and LimaTolerance so we don't implement BookingTypes
+# from scratch.
+limabean-booking = { version = "0.10", features = ["lima-parser-types", "rust-decimal"] }
+serde_json = "1"
+rust_decimal = "1"

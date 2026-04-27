@@ -1,7 +1,7 @@
 ---
 id: ADAPTER-001
 title: "Adapter: limabean"
-status: open
+status: in-progress
 priority: high
 created: 2026-04-26
 category: ADAPTER
@@ -46,3 +46,7 @@ The existing `implementations/beancountparserlima/` adapter is the closest analo
 - Existing analogue: `implementations/beancountparserlima/`
 - beancompat: `implementations/limabean/` (stub), `implementations/adapter.py` (protocol)
 - Skill: `/update-implementations`
+
+## Progress
+
+Scaffold landed: `implementations/limabean/__init__.py` (Python adapter, CAP_PARSE + CAP_BOOKING declared), `Cargo.toml` (`limabean-booking = "0.10"` with `lima-parser-types` feature, `beancount-parser-lima = "0.16"`), `src/main.rs` (parse path complete; booking loop is a well-commented TODO). `LimabeanAdapter` registered in `tests/conftest.py`. Remaining: implement `PostingSpec` for the parser's posting type and the per-transaction `limabean_booking::book()` loop in `src/main.rs`, then verify with a `check/` fixture.

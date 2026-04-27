@@ -7,12 +7,14 @@ from implementations.beancount import BeancountAdapter
 from implementations.beancountparser import BeancountParserAdapter
 from implementations.beancountparserlima import BeancountParserLimaAdapter
 from implementations.beancountv2 import BeancountV2Adapter
+from implementations.limabean import LimabeanAdapter
 
 ADAPTERS = {
     "beancount": BeancountAdapter,
     "beancount-v2": BeancountV2Adapter,
     "beancount-parser": BeancountParserAdapter,
     "beancount-parser-lima": BeancountParserLimaAdapter,
+    "limabean": LimabeanAdapter,
 }
 
 
