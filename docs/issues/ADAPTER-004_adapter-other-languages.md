@@ -1,7 +1,7 @@
 ---
 id: ADAPTER-004
 title: "Adapters: Dart / Zig / Clojure efforts"
-status: open
+status: done
 priority: low
 created: 2026-04-26
 category: ADAPTER
@@ -10,7 +10,7 @@ tags: [tracking]
 
 # Adapters: Dart / Zig / Clojure efforts
 
-**Status:** open (tracking)
+**Status:** done (all three projects accounted for)
 **Tier:** TBD per project
 
 ## Problem
@@ -24,27 +24,15 @@ This is *not* a commitment to wrap every implementation that ever gets mentioned
 - **Adapter pattern:** Subprocess-based, JSON-out — same as `implementations/beancountparserlima/` (Rust binary), `implementations/beancountparser/` (Python lark-based via `-c`), or `implementations/beancountv2/` (separate venv). Pick whichever pattern matches the implementation language.
 - **Adapter skill:** `/update-implementations`.
 
-## Tracking
+## Resolution
 
-Update this section as projects firm up:
+All three languages are now accounted for (confirmed 2026-04-27 via mailing list thread):
 
-- **Dart:** Project URL TBD. Mentioned in the mailing list thread.
-- **Zig:** Project URL TBD. Mentioned in the mailing list thread.
-- **Clojure:** Project URL TBD. Mentioned in the mailing list thread.
+- **Zig:** TurboBean by Moritz Drexl (https://github.com/themoritz/turbobean). Already split out to ADAPTER-002.
+- **Clojure:** limabean by Simon Guest (https://github.com/tesujimath/limabean). The project is 55% Rust / 42% Clojure; the Rust side handles parsing and booking, exposed as Clojure data structures. beancompat drives the Rust binary — already tracked in ADAPTER-001.
+- **Dart:** Vishesh Handa's private parser ("80% finished beancount parser in Dart, just for fun"). No public URL; not maintained; does not meet the bar (CLI surface + responsive maintainer). No adapter warranted.
 
-When any project becomes concrete:
-
-1. Add it to `docs/references/README.md` "Implementations in scope" table with language, author, and notes.
-2. Create a stub directory under `implementations/<name>/`.
-3. Split a dedicated `docs/issues/adapter-<name>.md` off this file.
-4. Remove the project's bullet from the Tracking list above.
-
-## Acceptance criteria
-
-This issue closes when either:
-
-- All three projects have been split into their own adapter issues, OR
-- The community signals that the projects have stalled and the bullets can be removed.
+No new issues to split off. Closing.
 
 ## References
 
