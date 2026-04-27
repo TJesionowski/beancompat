@@ -148,6 +148,10 @@ class BeancountAdapter:
 
         return json.loads(result.stdout)
 
+    def parse_string_with_plugins(self, source: str, plugins: list[str]) -> ParseResult:
+        prefix = "".join(f'plugin "{p}"\n' for p in plugins)
+        return self.parse_string(prefix + source)
+
     def load_as_fava(self, source: str) -> tuple[list, list, dict]:
         """Return live Python objects from beancount.loader.load_string.
 

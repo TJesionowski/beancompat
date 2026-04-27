@@ -104,6 +104,15 @@ class Implementation(Protocol):
         """
         ...
 
+    def parse_string_with_plugins(self, source: str, plugins: list[str]) -> ParseResult:
+        """Parse source with the given plugins applied. Requires CAP_PLUGINS.
+
+        Alternative implementations that register plugins via constructor args,
+        config files, or other mechanisms can implement this method with their
+        native plugin-registration path rather than embedding option lines in source.
+        """
+        ...
+
     def load_as_fava(self, source: str) -> tuple[list, list, dict]:
         """Return (entries, errors, options) as Python objects satisfying
         fava.beans.abc protocols. Requires CAP_FAVA.

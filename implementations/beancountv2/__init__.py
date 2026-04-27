@@ -96,6 +96,10 @@ class BeancountV2Adapter:
             options=data.get("options", {}),
         )
 
+    def parse_string_with_plugins(self, source: str, plugins: list[str]) -> ParseResult:
+        prefix = "".join(f'plugin "{p}"\n' for p in plugins)
+        return self.parse_string(prefix + source)
+
     def execute_query(self, source: str, query: str) -> QueryResult:
         with tempfile.NamedTemporaryFile(
             mode="w", suffix=".beancount", delete=False

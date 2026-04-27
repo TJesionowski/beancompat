@@ -126,3 +126,69 @@ plugin "beancount.plugins.does_not_exist_xyz"
 """
         result = beancount.parse_string(source)
         assert len(result.errors) > 0
+
+
+class TestPluginsMethod:
+    """parse_string_with_plugins: adapter-level plugin registration surface."""
+
+    def test_implicit_prices_via_method(self, beancount):
+        """Plugins passed via the method produce the same output as embedded option lines."""
+        source = """\
+2024-01-01 open Assets:Bank USD
+2024-01-01 open Assets:Foreign EUR
+
+2024-01-15 * "Exchange"
+  Assets:Foreign  100.00 EUR @ 1.10 USD
+  Assets:Bank    -110.00 USD
+"""
+        result = beancount.parse_string_with_plugins(
+            source, ["beancount.plugins.implicit_prices"]
+        )
+        assert len(result.errors) == 0
+        prices = [d for d in result.directives if d.type == "price"]
+        assert len(prices) >= 1
+        assert prices[0].data["currency"] == "EUR"
+
+    def test_empty_plugin_list(self, beancount):
+        """parse_string_with_plugins([]) behaves identically to parse_string."""
+        source = """\
+2024-01-01 open Assets:Bank USD
+2024-01-01 open Expenses:Food USD
+
+2024-01-15 * "Groceries"
+  Expenses:Food  50.00 USD
+  Assets:Bank   -50.00 USD
+"""
+        result_method = beancount.parse_string_with_plugins(source, [])
+        result_plain = beancount.parse_string(source)
+        assert len(result_method.errors) == len(result_plain.errors)
+        assert len(result_method.directives) == len(result_plain.directives)
+
+    def test_invalid_plugin_via_method(self, beancount):
+        """Unknown plugin name passed via method produces an error."""
+        source = "2024-01-01 open Assets:Bank USD\n"
+        result = beancount.parse_string_with_plugins(
+            source, ["beancount.plugins.does_not_exist_xyz"]
+        )
+        assert len(result.errors) > 0
+
+    def test_method_output_matches_option_line(self, beancount):
+        """plugin passed via method is equivalent to embedding option line in source."""
+        body = """\
+2024-01-01 open Assets:Bank USD
+2024-01-01 open Assets:Foreign EUR
+
+2024-01-15 * "Exchange"
+  Assets:Foreign  100.00 EUR @ 1.10 USD
+  Assets:Bank    -110.00 USD
+"""
+        via_method = beancount.parse_string_with_plugins(
+            body, ["beancount.plugins.implicit_prices"]
+        )
+        via_option = beancount.parse_string(
+            'plugin "beancount.plugins.implicit_prices"\n' + body
+        )
+        assert len(via_method.errors) == len(via_option.errors)
+        method_prices = [d for d in via_method.directives if d.type == "price"]
+        option_prices = [d for d in via_option.directives if d.type == "price"]
+        assert len(method_prices) == len(option_prices)

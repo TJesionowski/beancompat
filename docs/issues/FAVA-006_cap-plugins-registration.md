@@ -1,7 +1,7 @@
 ---
 id: FAVA-006
 title: "CAP_PLUGINS registration adapter method"
-status: open
+status: done
 priority: medium
 created: 2026-04-26
 category: FAVA
@@ -32,6 +32,10 @@ This matters because alternative implementations may take plugins via a differen
 - [ ] `tests/test_plugins.py` has a test that uses the new method (separate from the option-line path).
 - [ ] At least one fixture exercises a trivial plugin and asserts its observable effect.
 - [ ] Adapters without `CAP_PLUGINS` skip cleanly.
+
+## Resolution
+
+`parse_string_with_plugins(source, plugins)` added to the `Implementation` protocol in `implementations/adapter.py`. Both v3 (`implementations/beancount/__init__.py`) and v2 (`implementations/beancountv2/__init__.py`) adapters implement it by prepending `plugin "..."` option lines to the source before parsing. `tests/test_plugins.py` gains `TestPluginsMethod` with 4 tests covering: plugin-via-method observable effect, empty list equivalence with `parse_string`, invalid plugin error, and method/option-line parity.
 
 ## References
 
