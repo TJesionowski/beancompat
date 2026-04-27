@@ -5,7 +5,22 @@
       "Bash(ls:*)",
       "WebFetch(domain:beancount.github.io)",
       "WebFetch(domain:github.com)",
-      "Bash(.venv/bin/pytest)"
+      "Bash(.venv/bin/pytest)",
+      "Bash(.venv/bin/pip show:*)",
+      "Bash(python3:*)",
+      "Bash(pytest:*)",
+      "WebFetch(domain:pypi.org)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:files.pythonhosted.org)",
+      "Bash(pip show:*)",
+      "WebFetch(domain:docs.rs)",
+      "Bash(rustc --version)",
+      "Bash(cargo build:*)",
+      "Bash(git status:*)"
     ]
+  },
+  "sandbox": {
+    "enabled": false,
+    "autoAllowBashIfSandboxed": false
   }
 }

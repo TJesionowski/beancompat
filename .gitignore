@@ -6,3 +6,4 @@ results/
 .hypothesis/
 *.egg-info/
 target/
+.claude/scheduled_tasks.lock
