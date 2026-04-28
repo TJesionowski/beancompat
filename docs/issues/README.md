@@ -52,27 +52,34 @@ python scripts/issues.py validate
 - `/issues-update` — audit issues against current repo state; mark resolved, add new, refresh facts.
 - `/issues-init` — initialize a fresh tracker (stops if `docs/issues/` already exists).
 
-## Open — Fava-compat coverage
-
-| ID | Issue | Capability | Priority |
-|---|---|---|---|
-| FAVA-001 | [`options.dcontext` neutral representation](FAVA-001_options-dcontext-neutral.md) | CAP_FAVA | medium |
-| FAVA-002 | [`MISSING` sentinel tag](FAVA-002_missing-sentinel.md) | CAP_PRINT, CAP_FAVA | medium |
-| FAVA-003 | [`CAP_HASH` + `hash_entries`](FAVA-003_cap-hash.md) | CAP_HASH (new) | medium |
-| FAVA-004 | [Typed columns in `QueryResult`](FAVA-004_typed-query-columns.md) | CAP_BQL, CAP_FAVA | medium |
-| FAVA-005 | [30-key `options` coverage fixture](FAVA-005_options-coverage-fixture.md) | CAP_FAVA | high |
-| FAVA-006 | [`CAP_PLUGINS` registration method](FAVA-006_cap-plugins-registration.md) | CAP_PLUGINS | medium |
-| FAVA-007 | [`CAP_SUMMARIZE` for date-range windowing](FAVA-007_cap-summarize.md) | CAP_SUMMARIZE (new) | medium |
-| FAVA-008 | [`CAP_INGEST` (deferred)](FAVA-008_cap-ingest.md) | CAP_INGEST (new) | low |
-
 ## Open — Implementation adapters
 
 | ID | Issue | Language | Priority |
 |---|---|---|---|
-| ADAPTER-001 | [Adapter: limabean](ADAPTER-001_adapter-limabean.md) | Rust | high |
-| ADAPTER-002 | [Adapter: TurboBean](ADAPTER-002_adapter-turbobean.md) | TBD | medium |
-| ADAPTER-003 | [Adapter: rustledger](ADAPTER-003_adapter-rustledger.md) | Rust | medium |
-| ADAPTER-004 | [Adapters: Dart / Zig / Clojure](ADAPTER-004_adapter-other-languages.md) | various | low |
+| ADAPTER-002 | [Adapter: TurboBean](ADAPTER-002_adapter-turbobean.md) | Zig | medium |
+
+Blocked on upstream shipping a structured-output command (protobuf planned, not yet implemented).
+
+## Done — Fava-compat coverage
+
+| ID | Issue | Capability |
+|---|---|---|
+| FAVA-001 | [`options.dcontext` neutral representation](FAVA-001_options-dcontext-neutral.md) | CAP_FAVA |
+| FAVA-002 | [`MISSING` sentinel tag](FAVA-002_missing-sentinel.md) | CAP_PRINT, CAP_FAVA |
+| FAVA-003 | [`CAP_HASH` + `hash_entries`](FAVA-003_cap-hash.md) | CAP_HASH |
+| FAVA-004 | [Typed columns in `QueryResult`](FAVA-004_typed-query-columns.md) | CAP_BQL, CAP_FAVA |
+| FAVA-005 | [31-key `options` coverage fixture](FAVA-005_options-coverage-fixture.md) | CAP_FAVA |
+| FAVA-006 | [`CAP_PLUGINS` registration method](FAVA-006_cap-plugins-registration.md) | CAP_PLUGINS |
+| FAVA-007 | [`CAP_SUMMARIZE` for date-range windowing](FAVA-007_cap-summarize.md) | CAP_SUMMARIZE |
+| FAVA-008 | [`CAP_INGEST`](FAVA-008_cap-ingest.md) | CAP_INGEST |
+
+## Done — Implementation adapters
+
+| ID | Issue | Language |
+|---|---|---|
+| ADAPTER-001 | [Adapter: limabean](ADAPTER-001_adapter-limabean.md) | Rust+Clojure |
+| ADAPTER-003 | [Adapter: rustledger](ADAPTER-003_adapter-rustledger.md) | Rust |
+| ADAPTER-004 | [Adapters: Dart / Zig / Clojure](ADAPTER-004_adapter-other-languages.md) | various |
 
 ## Wontfix
 

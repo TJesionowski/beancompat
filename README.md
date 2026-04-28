@@ -75,33 +75,34 @@ A non-Python implementation that wants to be Fava-compatible needs a Python
 frontend layer that wraps its native output into beancount-namedtuple-shaped
 objects. See the CAP_FAVA docstring in `implementations/adapter.py`.
 
-### Fava-compat coverage roadmap
+### Fava-compat coverage
 
 Derived from a survey of Fava's beancount API surface (see the
 [`fava_contract_surface` memory](.claude/memory/fava_contract_surface.md) and
-the Fava-isolation layer at `src/fava/beans/`). Each row below is a known gap
-between what beancompat verifies today and what a full Fava-compatible
-implementation must expose. Ordered roughly by Fava-blast-radius. Click into
-each issue file under [`docs/issues/`](docs/issues/) for the problem, context,
-acceptance criteria, and references.
+the Fava-isolation layer at `src/fava/beans/`). All items below are shipped.
+Click into each issue file under [`docs/issues/`](docs/issues/) for the
+problem, context, acceptance criteria, and references.
 
-| Issue | Capability |
-|---|---|
-| [`options.dcontext` neutral representation](docs/issues/options-dcontext-neutral.md) | CAP_FAVA |
-| [`MISSING` sentinel tag](docs/issues/missing-sentinel.md) | CAP_PRINT, CAP_FAVA |
-| [`CAP_HASH` + `hash_entries`](docs/issues/cap-hash.md) | CAP_HASH (new) |
-| [Typed columns in `QueryResult`](docs/issues/typed-query-columns.md) | CAP_BQL, CAP_FAVA |
-| [30-key `options` coverage fixture](docs/issues/options-coverage-fixture.md) | CAP_FAVA |
-| [`CAP_PLUGINS` registration method](docs/issues/cap-plugins-registration.md) | CAP_PLUGINS |
-| [`CAP_SUMMARIZE` for date-range windowing](docs/issues/cap-summarize.md) | CAP_SUMMARIZE (new) |
-| [`CAP_INGEST` (deferred)](docs/issues/cap-ingest.md) | CAP_INGEST (new) |
-| [`loader._load(...)` private-API parity](docs/issues/loader-private-api.md) | wontfix — Fava-side wart |
+| Issue | Capability | Status |
+|---|---|---|
+| [`options.dcontext` neutral representation](docs/issues/FAVA-001_options-dcontext-neutral.md) | CAP_FAVA | done |
+| [`MISSING` sentinel tag](docs/issues/FAVA-002_missing-sentinel.md) | CAP_PRINT, CAP_FAVA | done |
+| [`CAP_HASH` + `hash_entries`](docs/issues/FAVA-003_cap-hash.md) | CAP_HASH | done |
+| [Typed columns in `QueryResult`](docs/issues/FAVA-004_typed-query-columns.md) | CAP_BQL, CAP_FAVA | done |
+| [31-key `options` coverage fixture](docs/issues/FAVA-005_options-coverage-fixture.md) | CAP_FAVA | done |
+| [`CAP_PLUGINS` registration method](docs/issues/FAVA-006_cap-plugins-registration.md) | CAP_PLUGINS | done |
+| [`CAP_SUMMARIZE` for date-range windowing](docs/issues/FAVA-007_cap-summarize.md) | CAP_SUMMARIZE | done |
+| [`CAP_INGEST`](docs/issues/FAVA-008_cap-ingest.md) | CAP_INGEST | done |
+| [`loader._load(...)` private-API parity](docs/issues/FAVA-009_loader-private-api.md) | — | wontfix — Fava-side wart |
 
 ### Shipped
 - Parse/check-tier JSON fixtures (`test_fixtures.py`)
 - `CAP_PRINT` round-trip (`test_round_trip.py`)
 - `CAP_FAVA` Python-level ABC conformance (`test_fava_compat.py`)
 - `CostSpec` vs `Cost` `kind` discriminator in the portable schema
+- Full Fava-compat capability surface: `CAP_HASH`, `CAP_PLUGINS`, `CAP_SUMMARIZE`, `CAP_INGEST`
+- 31-key `options` coverage fixture; `dcontext` as `display_precision_by_currency`; `MISSING` sentinel
+- Adapters: limabean (Rust+Clojure), rustledger (Rust)
 
 ## Project structure
 
